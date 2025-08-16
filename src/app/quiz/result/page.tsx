@@ -3,6 +3,8 @@
 import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { QUIZ, type AnimalKey } from "../../../data/quiz";
+import Link from "next/link";
+
 
 type Totals = Record<AnimalKey, number>;
 const KEYS: AnimalKey[] = ["owl", "fox", "wolf", "dolphin"];
@@ -170,16 +172,15 @@ export default function ResultPage() {
 
       {/* Actions */}
       <div className="flex flex-wrap gap-3">
-        <a className="btn btn-outline" href="/quiz">Retake</a>
-        <a className="btn btn-outline" href="/">Home</a>
-        <button className="btn btn-primary" onClick={share}>Share</button>
-        {/* Go to /shop with your top type + pet */}
-        <a
-          className="btn btn-outline"
-          href={`/shop?type=${encodeURIComponent(topKey)}&pet=${encodeURIComponent(petKind)}`}
-        >
-          Shop your result
-        </a>
+      <Link className="btn btn-outline" href="/quiz">Retake</Link>
+  <Link className="btn btn-outline" href="/">Home</Link>
+  <button className="btn btn-primary" onClick={share}>Share</button>
+  <Link
+    className="btn btn-outline"
+    href={`/shop?type=${encodeURIComponent(topKey)}&pet=${encodeURIComponent(petKind)}`}
+  >
+    Shop your result
+  </Link>
       </div>
     </main>
   );
