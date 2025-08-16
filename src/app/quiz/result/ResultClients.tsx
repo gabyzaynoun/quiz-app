@@ -184,11 +184,12 @@ export default function ResultClient() {
         <Link className="btn btn-outline" href="/">Home</Link>
         <button className="btn btn-primary" onClick={share}>Share</button>
         <Link
-          className="btn btn-outline"
-          href={`/shop?type=${encodeURIComponent(topKey)}&pet=${encodeURIComponent(petKind)}`}
-        >
-          Shop your result
+        className="btn btn-outline"
+        href={`/shop?type=${encodeURIComponent(topKey)}&pet=${encodeURIComponent(petKind)}`}
+      >
+        Shop your result
         </Link>
+
       </div>
     </main>
   );
