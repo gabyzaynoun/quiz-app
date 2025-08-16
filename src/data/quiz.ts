@@ -30,6 +30,18 @@ export type Result = {
   tips: string[];
   products: ProductRec[];
 };
+export type ResultMeta = {
+  weightKey: AnimalKey;
+  label: string;
+  description: string;
+  // NEW:
+  traits: string[];      // quick snapshot chips
+  strengths: string[];   // what they’re great at
+  pitfalls: string[];    // common traps
+  bestAt: string[];      // best environments / tasks
+  tips: string[];        // already present — keep using
+  products: { id: string; title: string; href: string; subtitle?: string }[];
+};
 
 export const QUIZ = {
   id: "animal-archetype",
@@ -174,68 +186,109 @@ export const QUIZ = {
 
   results: [
     {
-      id: "r1",
-      label: "Owl (Analytical & Calm)",
-      description: "You’re reflective, precise, and thrive in quiet mastery.",
       weightKey: "owl",
+      label: "The Owl (Deep Focus)",
+      description: "You thrive on long, quiet stretches and meaningful problems.",
+      traits: ["Analytical", "Independent", "Calm", "Detail-oriented"],
+      strengths: [
+        "Deep work and complex reasoning",
+        "Minimal context switching",
+        "Systems thinking & documentation",
+      ],
+      pitfalls: [
+        "Over-researching instead of shipping",
+        "Avoiding collaboration until late",
+        "Energy dips if the day gets noisy",
+      ],
+      bestAt: ["Designing systems", "Reading/analysis", "Long coding sessions"],
       tips: [
-        "Block quiet focus windows; batch messages later.",
-        "Use a ‘good enough’ rule to curb perfectionism.",
-        "Keep a single trusted system for notes/tasks."
+        "Block two 90-minute focus windows daily.",
+        "Batch notifications and Slack checks every 45–60 min.",
+        "End each session with a 3-bullet handoff note to ‘future you’.",
       ],
       products: [
-        { id: "p1", title: "Adjustable Reading Lamp", subtitle: "Cozy, eye-friendly light", href: "#" },
-        { id: "p2", title: "Noise-Cancelling Headphones", subtitle: "Deep focus on demand", href: "#" },
-        { id: "p3", title: "Premium Dot-Grid Notebook", subtitle: "Tidy thinking on paper", href: "#" }
-      ]
+        { id: "sony-xm5", title: "Sony WH-1000XM5 ANC Headphones", href: "https://www.amazon.com.au/dp/B09XS7JWHH", subtitle: "Silence for deep work" },
+        { id: "leuchtturm-a5-dotted", title: "Leuchtturm1917 A5 Dotted", href: "https://www.amazon.com.au/Leuchtturm1917-Medium-Size-Hardcover-Notebook/dp/B07L16V71N", subtitle: "Paper for thinking" },
+        { id: "noise-machine", title: "White/Brown Noise Machine", href: "https://www.amazon.com.au/s?k=white+noise+machine", subtitle: "Stay in the zone" },
+      ],
     },
     {
-      id: "r2",
-      label: "Fox (Agile & Creative)",
-      description: "You’re inventive, quick, and love variety and hacks.",
       weightKey: "fox",
+      label: "The Fox (Playful Momentum)",
+      description: "You move fast, experiment, and bring energy to teams.",
+      traits: ["Curious", "Social", "Fast", "Inventive"],
+      strengths: [
+        "Rapid prototyping & demos",
+        "Rallying people and ideas",
+        "Creative problem-solving on the fly",
+      ],
+      pitfalls: [
+        "Starting too many threads",
+        "Under-documenting decisions",
+        "Context bouncing fatigue",
+      ],
+      bestAt: ["Workshops", "Prototyping", "Customer calls"],
       tips: [
-        "Timebox experiments; capture quick wins daily.",
-        "Keep a ‘parking lot’ list for new ideas.",
-        "Automate repetitive steps to keep momentum."
+        "Time-box each task with a visible timer.",
+        "Log decisions in a running ‘lab notes’ doc.",
+        "Commit to one ‘boring but important’ task daily.",
       ],
       products: [
-        { id: "p1", title: "Clicky Fidget Tool", subtitle: "Channel restlessness", href: "#" },
-        { id: "p2", title: "Compact Wireless Keyboard", subtitle: "Move fast, anywhere", href: "#" },
-        { id: "p3", title: "Idea Cards / Prompt Deck", subtitle: "Kickstart creativity", href: "#" }
-      ]
+        { id: "govee-light-bars", title: "Govee Smart LED Light Bars", href: "https://www.amazon.com.au/dp/B0949DDM3K", subtitle: "Fun creative ambience" },
+        { id: "pomodoro-cube", title: "Pomodoro Cube Timer", href: "https://www.amazon.com.au/s?k=cube+timer+pomodoro", subtitle: "Time-box sprints" },
+      ],
     },
     {
-      id: "r3",
-      label: "Wolf (Leader & Loyal)",
-      description: "You rally people, protect the pack, and execute together.",
       weightKey: "wolf",
+      label: "The Wolf (Structured Execution)",
+      description: "You love clear plans, predictable systems, and finishing well.",
+      traits: ["Organised", "Practical", "Reliable", "Deliberate"],
+      strengths: [
+        "Process building & repeatability",
+        "Long-term project stamina",
+        "Reducing chaos into checklists",
+      ],
+      pitfalls: [
+        "Perfectionism delays shipping",
+        "Rigid routines block new ideas",
+        "Taking on too much solo",
+      ],
+      bestAt: ["Roadmaps", "Ops & playbooks", "QA and hardening"],
       tips: [
-        "Start each week with a quick alignment huddle.",
-        "Delegate clearly; define ‘done’ states.",
-        "Schedule your own deep-work time (guard it)."
+        "Define ‘good enough’ before you start.",
+        "Schedule 1 weekly experiment hour.",
+        "Automate one manual step per week.",
       ],
       products: [
-        { id: "p1", title: "Desk Whiteboard", subtitle: "Plan and align fast", href: "#" },
-        { id: "p2", title: "Resistance Bands", subtitle: "Quick energy resets", href: "#" },
-        { id: "p3", title: "Leadership Planner", subtitle: "Own the roadmap", href: "#" }
-      ]
+        { id: "time-timer-mod", title: "Time Timer MOD", href: "https://www.amazon.com.au/dp/B01COEZM1M", subtitle: "Visual deadlines" },
+        { id: "glass-desk-whiteboard", title: "Glass Desktop Whiteboard", href: "https://www.amazon.com.au/Glass-Desktop-Computer-Accessories-Calendar/dp/B0BVYTKSLD", subtitle: "Plan at a glance" },
+      ],
     },
     {
-      id: "r4",
-      label: "Dolphin (Social & Energizing)",
-      description: "You bring warmth, humor, and momentum through people.",
       weightKey: "dolphin",
+      label: "The Dolphin (Collaborative Flow)",
+      description: "You get energy from people, feedback loops, and iteration.",
+      traits: ["Empathic", "Collaborative", "Adaptive", "Communicative"],
+      strengths: [
+        "Team facilitation & unblockers",
+        "Great at feedback cycles",
+        "User-centric instincts",
+      ],
+      pitfalls: [
+        "Too many meetings → drained focus",
+        "Saying ‘yes’ to everything",
+        "Under-protecting solo time",
+      ],
+      bestAt: ["Pairing sessions", "Design reviews", "User interviews"],
       tips: [
-        "Use co-working blocks to kick-start focus.",
-        "Set clear ‘on/off’ windows for social apps.",
-        "Keep your environment playful but minimal."
+        "Protect one deep-work block before noon.",
+        "Batch meetings back-to-back then recover.",
+        "Write a 5-line plan before each session.",
       ],
       products: [
-        { id: "p1", title: "Insulated Water Bottle", subtitle: "Hydration = energy", href: "#" },
-        { id: "p2", title: "RGB Light Bar", subtitle: "Set the vibe for flow", href: "#" },
-        { id: "p3", title: "Wireless Earbuds", subtitle: "Calls + music seamlessly", href: "#" }
-      ]
-    }
-  ] as Result[]
+        { id: "govee-light-bars", title: "Ambient Light Bars", href: "https://www.amazon.com.au/dp/B0949DDM3K", subtitle: "Mood for creative collab" },
+        { id: "noise-machine", title: "Noise Machine", href: "https://www.amazon.com.au/s?k=white+noise+machine", subtitle: "Focus buffer after calls" },
+      ],
+    },
+  ],
 };

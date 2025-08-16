@@ -85,61 +85,138 @@ export default function ResultClient() {
   };
 
   return (
-    <main className="container space-y-6">
-      {/* Top card */}
-      <div className="card" style={{ boxShadow: "var(--shadow-soft)" }}>
-        <div className="card-body">
-          <div className="text-xs text-slate-500">Your Top Animal</div>
-          <h1 className="text-3xl font-extrabold mt-1">{main.label}</h1>
-          <p className="text-slate-600 mt-2">{main.description}</p>
+  <main className="container space-y-6">
+    {/* Top card */}
+    <div className="card" style={{ boxShadow: "var(--shadow-soft)" }}>
+      <div className="card-body">
+        <div className="text-xs text-slate-500">Your Top Animal</div>
+        <h1 className="text-3xl font-extrabold mt-1">{main.label}</h1>
+        <p className="text-slate-600 mt-2">{main.description}</p>
 
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-2 text-xs font-medium rounded-full px-3 py-1 bg-indigo-600 text-white">
-              {percents[topKey]}% {main.label}
-            </span>
-            <span className="inline-flex items-center gap-2 text-xs font-medium rounded-full px-3 py-1 bg-indigo-100 text-indigo-800">
-              {percents[runnerUpKey]}% {runner.label}
-            </span>
-          </div>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-2 text-xs font-medium rounded-full px-3 py-1 bg-indigo-600 text-white">
+            {percents[topKey]}% {main.label}
+          </span>
+          <span className="inline-flex items-center gap-2 text-xs font-medium rounded-full px-3 py-1 bg-indigo-100 text-indigo-800">
+            {percents[runnerUpKey]}% {runner.label}
+          </span>
         </div>
       </div>
+    </div>
 
-      {/* Percent bars */}
-      <div className="card">
-        <div className="card-body">
-          <div className="grid gap-3">
-            {KEYS.map((k) => (
-              <div key={k}>
-                <div className="flex justify-between text-xs text-slate-500 mb-1">
-                  <span className="capitalize">{k}</span>
-                  <span>{percents[k]}%</span>
-                </div>
-                <div className="progress">
-                  <div className="progress__bar" style={{ width: `${percents[k]}%` }} />
-                </div>
-              </div>
-            ))}
-          </div>
+    {/* Snapshot chips */}
+    <div className="card">
+      <div className="card-body">
+        <h3 className="text-lg font-semibold">Snapshot</h3>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {(main.traits ?? []).map((t: string, i: number) => (
+            <span
+              key={i}
+              className="inline-flex items-center text-xs font-medium rounded-full px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"
+            >
+              {t}
+            </span>
+          ))}
         </div>
       </div>
+    </div>
 
-      {/* Tips */}
+    {/* Strengths vs Watch-outs */}
+    <div className="grid sm:grid-cols-2 gap-3">
       <div className="card">
         <div className="card-body">
-          <h3 className="text-lg font-semibold">Tips for {main.label}</h3>
+          <h3 className="text-lg font-semibold">Strengths</h3>
           <ul className="mt-2 list-disc pl-5 text-slate-700 space-y-1">
-            {main.tips.map((t, i) => <li key={i}>{t}</li>)}
+            {(main.strengths ?? []).map((s: string, i: number) => <li key={i}>{s}</li>)}
           </ul>
-          <p className="text-xs text-slate-500 mt-3">Fun self-reflection — not a medical assessment.</p>
         </div>
       </div>
-
-      {/* Recommended gear */}
       <div className="card">
         <div className="card-body">
-          <h3 className="text-lg font-semibold">Recommended Gear for {main.label}</h3>
+          <h3 className="text-lg font-semibold">Watch-outs</h3>
+          <ul className="mt-2 list-disc pl-5 text-slate-700 space-y-1">
+            {(main.pitfalls ?? []).map((p: string, i: number) => <li key={i}>{p}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    {/* Best environments */}
+    <div className="card">
+      <div className="card-body">
+        <h3 className="text-lg font-semibold">You’re best at</h3>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {(main.bestAt ?? []).map((b: string, i: number) => (
+            <span
+              key={i}
+              className="inline-flex items-center text-xs font-medium rounded-full px-3 py-1 bg-indigo-50 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200"
+            >
+              {b}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    {/* Percent bars */}
+    <div className="card">
+      <div className="card-body">
+        <div className="grid gap-3">
+          {KEYS.map((k) => (
+            <div key={k}>
+              <div className="flex justify-between text-xs text-slate-500 mb-1">
+                <span className="capitalize">{k}</span>
+                <span>{percents[k]}%</span>
+              </div>
+              <div className="progress">
+                <div className="progress__bar" style={{ width: `${percents[k]}%` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    {/* Tips */}
+    <div className="card">
+      <div className="card-body">
+        <h3 className="text-lg font-semibold">Tips for {main.label}</h3>
+        <ul className="mt-2 list-disc pl-5 text-slate-700 space-y-1">
+          {main.tips.map((t, i) => <li key={i}>{t}</li>)}
+        </ul>
+        <p className="text-xs text-slate-500 mt-3">Fun self-reflection — not a medical assessment.</p>
+      </div>
+    </div>
+
+    {/* Recommended gear */}
+    <div className="card">
+      <div className="card-body">
+        <h3 className="text-lg font-semibold">Recommended Gear for {main.label}</h3>
+        <div className="mt-3 grid sm:grid-cols-2 gap-3">
+          {main.products.map((p) => (
+            <a key={p.id} href={p.href} target="_blank" rel="noopener noreferrer" className="choice no-underline">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <div className="font-medium">{p.title}</div>
+                  {p.subtitle && <div className="text-xs text-slate-500">{p.subtitle}</div>}
+                </div>
+                <span className="text-xs font-semibold px-2 py-1 rounded bg-indigo-600 text-white">View</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    {/* Conditional: Pet-owner gear */}
+    {petKind !== "none" && (
+      <div className="card">
+        <div className="card-body">
+          <h3 className="text-lg font-semibold">
+            Recommended for your {petKind === "multi" ? "pets" : petKind}
+          </h3>
           <div className="mt-3 grid sm:grid-cols-2 gap-3">
-            {main.products.map((p) => (
+            {PET_PRODUCTS[petKind === "multi" ? "multi" : petKind].map((p) => (
               <a key={p.id} href={p.href} target="_blank" rel="noopener noreferrer" className="choice no-underline">
                 <div className="flex items-center justify-between gap-3">
                   <div>
@@ -153,44 +230,21 @@ export default function ResultClient() {
           </div>
         </div>
       </div>
+    )}
 
-      {/* Conditional: Pet-owner gear */}
-      {petKind !== "none" && (
-        <div className="card">
-          <div className="card-body">
-            <h3 className="text-lg font-semibold">
-              Recommended for your {petKind === "multi" ? "pets" : petKind}
-            </h3>
-            <div className="mt-3 grid sm:grid-cols-2 gap-3">
-              {PET_PRODUCTS[petKind === "multi" ? "multi" : petKind].map((p) => (
-                <a key={p.id} href={p.href} target="_blank" rel="noopener noreferrer" className="choice no-underline">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <div className="font-medium">{p.title}</div>
-                      {p.subtitle && <div className="text-xs text-slate-500">{p.subtitle}</div>}
-                    </div>
-                    <span className="text-xs font-semibold px-2 py-1 rounded bg-indigo-600 text-white">View</span>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Actions */}
-      <div className="flex flex-wrap gap-3">
-        <Link className="btn btn-outline" href="/quiz">Retake</Link>
-        <Link className="btn btn-outline" href="/">Home</Link>
-        <button className="btn btn-primary" onClick={share}>Share</button>
-        <Link
+    {/* Actions */}
+    <div className="flex flex-wrap gap-3">
+      <Link className="btn btn-outline" href="/quiz">Retake</Link>
+      <Link className="btn btn-outline" href="/">Home</Link>
+      <button className="btn btn-primary" onClick={share}>Share</button>
+      <Link
         className="btn btn-outline"
         href={`/shop?type=${encodeURIComponent(topKey)}&pet=${encodeURIComponent(petKind)}`}
       >
         Shop your result
-        </Link>
+      </Link>
+    </div>
+  </main>
+);
 
-      </div>
-    </main>
-  );
 }
