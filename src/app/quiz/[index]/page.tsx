@@ -2,7 +2,7 @@
 
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { QUIZ } from "../../../data/quiz";
-import { Progress } from "../../../components/ui/Progress";
+
 
 export default function QuestionPage() {
   const router = useRouter();
