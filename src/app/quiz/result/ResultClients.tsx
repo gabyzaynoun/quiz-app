@@ -6,11 +6,12 @@ import Link from "next/link";
 import { QUIZ, type AnimalKey } from "../../../data/quiz";
 import { byAudience, type AudienceKey } from "../../../data/products";
 import { withAffiliateTag } from "../../../data/affiliates";
-import { trackAffiliateClick } from "../../../lib/track"; // <-- tracking
+import { trackAffiliateClick } from "../../../lib/track";
 
 type Totals = Record<AnimalKey, number>;
 const KEYS: AnimalKey[] = ["owl", "fox", "wolf", "dolphin"];
 
+// Map animal → product audiences
 const ANIMAL_TO_AUDIENCE: Record<AnimalKey, AudienceKey[]> = {
   owl: ["focus", "structure"],
   fox: ["play"],
@@ -18,11 +19,21 @@ const ANIMAL_TO_AUDIENCE: Record<AnimalKey, AudienceKey[]> = {
   dolphin: ["play", "focus"],
 };
 
+// Derive the base result type from the QUIZ object and extend with optional fields
+type BaseResult = (typeof QUIZ)["results"][number];
+type ExtendedResult = BaseResult & {
+  traits?: string[];
+  strengths?: string[];
+  pitfalls?: string[];
+  bestAt?: string[];
+};
+
 export default function ResultClient() {
   const search = useSearchParams();
   const aParam = search.get("a") || "";
   const selected = aParam.split(",").filter(Boolean);
 
+  // Pet answer (non-scoring)
   const petIndex = QUIZ.questions.findIndex((q) => q.id === "pet");
   const petAnswerId = petIndex >= 0 ? selected[petIndex] : undefined;
   const petKind: "dog" | "cat" | "multi" | "none" =
@@ -30,6 +41,7 @@ export default function ResultClient() {
     petAnswerId === "b" ? "cat" :
     petAnswerId === "c" ? "multi" : "none";
 
+  // Score
   const { order, percents } = useMemo(() => {
     const t: Totals = { owl: 0, fox: 0, wolf: 0, dolphin: 0 };
     QUIZ.questions.forEach((q, idx) => {
@@ -48,9 +60,10 @@ export default function ResultClient() {
 
   const topKey = order[0] ?? "owl";
   const runnerUpKey = order[1] ?? "fox";
-  const main = QUIZ.results.find((r) => r.weightKey === topKey) ?? QUIZ.results[0];
-  const runner = QUIZ.results.find((r) => r.weightKey === runnerUpKey) ?? QUIZ.results[0];
+  const main = (QUIZ.results.find((r) => r.weightKey === topKey) ?? QUIZ.results[0]) as ExtendedResult;
+  const runner = (QUIZ.results.find((r) => r.weightKey === runnerUpKey) ?? QUIZ.results[0]) as ExtendedResult;
 
+  // Catalog picks (general + optional pet)
   const baseAudiences = ANIMAL_TO_AUDIENCE[topKey] ?? ["focus"];
   const petAudience: AudienceKey | null =
     petKind === "dog" ? "dogs" : petKind === "cat" ? "cats" : petKind === "multi" ? "multi" : null;
@@ -62,9 +75,15 @@ export default function ResultClient() {
   const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/quiz` : "";
   const share = async () => {
     try {
-      if (navigator.share) await navigator.share({ title: "Animal Archetype", text: shareText, url: shareUrl });
-      else window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`,"_blank");
-    } catch {}
+      if (navigator.share) {
+        await navigator.share({ title: "Animal Archetype", text: shareText, url: shareUrl });
+      } else {
+        window.open(
+          `https://twitter.com/intent/tweet?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`,
+          "_blank"
+        );
+      }
+    } catch { /* no-op */ }
   };
 
   return (
@@ -86,6 +105,25 @@ export default function ResultClient() {
         </div>
       </div>
 
+      {/* Snapshot traits (optional if present) */}
+      {!!main.traits?.length && (
+        <div className="card">
+          <div className="card-body">
+            <h3 className="text-lg font-semibold">Snapshot</h3>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {main.traits!.map((t, i) => (
+                <span
+                  key={i}
+                  className="inline-flex items-center text-xs font-medium rounded-full px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Percent bars */}
       <div className="card">
         <div className="card-body">
@@ -105,37 +143,40 @@ export default function ResultClient() {
         </div>
       </div>
 
-      {/* Strengths / Watch-outs / Best at (render if present) */}
+      {/* Strengths / Watch-outs */}
       <div className="grid sm:grid-cols-2 gap-3">
-        {(main as any).strengths && (
+        {!!main.strengths?.length && (
           <div className="card">
             <div className="card-body">
               <h3 className="text-lg font-semibold">Strengths</h3>
               <ul className="mt-2 list-disc pl-5 text-slate-700 space-y-1">
-                {(main as any).strengths.map((s: string, i: number) => <li key={i}>{s}</li>)}
+                {main.strengths!.map((s, i) => <li key={i}>{s}</li>)}
               </ul>
             </div>
           </div>
         )}
-        {(main as any).pitfalls && (
+        {!!main.pitfalls?.length && (
           <div className="card">
             <div className="card-body">
               <h3 className="text-lg font-semibold">Watch-outs</h3>
               <ul className="mt-2 list-disc pl-5 text-slate-700 space-y-1">
-                {(main as any).pitfalls.map((p: string, i: number) => <li key={i}>{p}</li>)}
+                {main.pitfalls!.map((p, i) => <li key={i}>{p}</li>)}
               </ul>
             </div>
           </div>
         )}
       </div>
 
-      {(main as any).bestAt && (
+      {!!main.bestAt?.length && (
         <div className="card">
           <div className="card-body">
             <h3 className="text-lg font-semibold">You’re best at</h3>
             <div className="mt-2 flex flex-wrap gap-2">
-              {(main as any).bestAt.map((b: string, i: number) => (
-                <span key={i} className="inline-flex items-center text-xs font-medium rounded-full px-3 py-1 bg-indigo-50 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200">
+              {main.bestAt!.map((b, i) => (
+                <span
+                  key={i}
+                  className="inline-flex items-center text-xs font-medium rounded-full px-3 py-1 bg-indigo-50 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200"
+                >
                   {b}
                 </span>
               ))}
@@ -149,14 +190,14 @@ export default function ResultClient() {
         <div className="card-body">
           <h3 className="text-lg font-semibold">Recommended Gear for {main.label}</h3>
           <div className="mt-3 grid sm:grid-cols-2 gap-3">
-            {generalPicks.map((p) => (
+            {byAudience(baseAudiences).slice(0, 6).map((p) => (
               <a
                 key={p.id}
                 href={withAffiliateTag(p.href)}
                 target="_blank"
                 rel="noopener noreferrer nofollow sponsored"
                 className="choice no-underline"
-                onClick={() => trackAffiliateClick({ id: p.id, vendor: p.vendor, title: p.title })} // <-- track
+                onClick={() => trackAffiliateClick({ id: p.id, vendor: p.vendor, title: p.title })}
               >
                 <div className="flex items-center justify-between gap-3">
                   <div>
@@ -172,19 +213,19 @@ export default function ResultClient() {
       </div>
 
       {/* Conditional: pet picks (tracked + tagged) */}
-      {petPicks.length > 0 && (
+      {!!petAudience && (
         <div className="card">
           <div className="card-body">
             <h3 className="text-lg font-semibold">For your {petKind === "multi" ? "pets" : petKind}</h3>
             <div className="mt-3 grid sm:grid-cols-2 gap-3">
-              {petPicks.map((p) => (
+              {byAudience([petAudience]).slice(0, 6).map((p) => (
                 <a
                   key={p.id}
                   href={withAffiliateTag(p.href)}
                   target="_blank"
                   rel="noopener noreferrer nofollow sponsored"
                   className="choice no-underline"
-                  onClick={() => trackAffiliateClick({ id: p.id, vendor: p.vendor, title: p.title })} // <-- track
+                  onClick={() => trackAffiliateClick({ id: p.id, vendor: p.vendor, title: p.title })}
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div>
@@ -205,7 +246,10 @@ export default function ResultClient() {
         <Link className="btn btn-outline" href="/quiz">Retake</Link>
         <Link className="btn btn-outline" href="/">Home</Link>
         <button className="btn btn-primary" onClick={share}>Share</button>
-        <Link className="btn btn-outline" href={`/shop?type=${encodeURIComponent(topKey)}&pet=${encodeURIComponent(petKind)}`}>
+        <Link
+          className="btn btn-outline"
+          href={`/shop?type=${encodeURIComponent(topKey)}&pet=${encodeURIComponent(petKind)}`}
+        >
           Shop your result
         </Link>
       </div>
