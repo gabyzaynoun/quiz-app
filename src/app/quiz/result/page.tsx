@@ -1,13 +1,13 @@
+// src/app/quiz/result/page.tsx
 import { Suspense } from "react";
-import ResultClient from "../result/ResultClients";
+import ResultClient from "./ResultClient";
 
-export default function Page() {
+export const metadata = { title: "Your Result" };
+
+export default function ResultPage() {
   return (
-    <Suspense fallback={<main className="container py-16">Loading result…</main>}>
+    <Suspense fallback={<div className="p-6 text-sm text-slate-400">Loading…</div>}>
       <ResultClient />
     </Suspense>
   );
 }
-
-// Optional, but can help avoid static prerender issues:
-export const dynamic = "force-dynamic";
