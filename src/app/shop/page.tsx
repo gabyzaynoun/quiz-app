@@ -3,6 +3,8 @@ import ShopClient from "../shop/shopClient";
 
 export const dynamic = "force-dynamic";
 
+export const metadata = { title: "Shop" };
+
 export default function Page() {
   return (
     <Suspense fallback={<main className="container py-16">Loading shop…</main>}>
