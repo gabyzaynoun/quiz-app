@@ -19,14 +19,15 @@ const ANIMAL_TO_AUDIENCE: Record<AnimalKey, AudienceKey[]> = {
   dolphin: ["play", "focus"],
 };
 
-// Derive the base result type from the QUIZ object and extend with optional fields
+// Extend the base result type with optional rich fields
 type BaseResult = (typeof QUIZ)["results"][number];
-type ExtendedResult = BaseResult & {
+type RichFields = {
   traits?: string[];
   strengths?: string[];
   pitfalls?: string[];
   bestAt?: string[];
 };
+type ExtendedResult = BaseResult & RichFields;
 
 export default function ResultClient() {
   const search = useSearchParams();
@@ -44,22 +45,29 @@ export default function ResultClient() {
   // Score
   const { order, percents } = useMemo(() => {
     const t: Totals = { owl: 0, fox: 0, wolf: 0, dolphin: 0 };
+
     QUIZ.questions.forEach((q, idx) => {
       const picked = selected[idx];
       const ans = q.answers.find((a) => a.id === picked);
       if (!ans?.weights) return;
       KEYS.forEach((k) => { t[k] += ans.weights?.[k] ?? 0; });
     });
+
     const sum = Math.max(1, KEYS.reduce((s, k) => s + t[k], 0));
-    const perc = Object.fromEntries(
-      KEYS.map((k) => [k, Math.round((t[k] / sum) * 100)])
-    ) as Record<AnimalKey, number>;
+    const perc: Record<AnimalKey, number> = {
+      owl: Math.round((t.owl / sum) * 100),
+      fox: Math.round((t.fox / sum) * 100),
+      wolf: Math.round((t.wolf / sum) * 100),
+      dolphin: Math.round((t.dolphin / sum) * 100),
+    };
+
     const ord = [...KEYS].sort((a, b) => t[b] - t[a]);
     return { order: ord, percents: perc };
   }, [selected]);
 
   const topKey = order[0] ?? "owl";
   const runnerUpKey = order[1] ?? "fox";
+
   const main = (QUIZ.results.find((r) => r.weightKey === topKey) ?? QUIZ.results[0]) as ExtendedResult;
   const runner = (QUIZ.results.find((r) => r.weightKey === runnerUpKey) ?? QUIZ.results[0]) as ExtendedResult;
 
@@ -111,7 +119,7 @@ export default function ResultClient() {
           <div className="card-body">
             <h3 className="text-lg font-semibold">Snapshot</h3>
             <div className="mt-3 flex flex-wrap gap-2">
-              {main.traits!.map((t, i) => (
+              {main.traits!.map((t: string, i: number) => (
                 <span
                   key={i}
                   className="inline-flex items-center text-xs font-medium rounded-full px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"
@@ -150,7 +158,7 @@ export default function ResultClient() {
             <div className="card-body">
               <h3 className="text-lg font-semibold">Strengths</h3>
               <ul className="mt-2 list-disc pl-5 text-slate-700 space-y-1">
-                {main.strengths!.map((s, i) => <li key={i}>{s}</li>)}
+                {main.strengths!.map((s: string, i: number) => <li key={i}>{s}</li>)}
               </ul>
             </div>
           </div>
@@ -160,7 +168,7 @@ export default function ResultClient() {
             <div className="card-body">
               <h3 className="text-lg font-semibold">Watch-outs</h3>
               <ul className="mt-2 list-disc pl-5 text-slate-700 space-y-1">
-                {main.pitfalls!.map((p, i) => <li key={i}>{p}</li>)}
+                {main.pitfalls!.map((p: string, i: number) => <li key={i}>{p}</li>)}
               </ul>
             </div>
           </div>
@@ -172,7 +180,7 @@ export default function ResultClient() {
           <div className="card-body">
             <h3 className="text-lg font-semibold">You’re best at</h3>
             <div className="mt-2 flex flex-wrap gap-2">
-              {main.bestAt!.map((b, i) => (
+              {main.bestAt!.map((b: string, i: number) => (
                 <span
                   key={i}
                   className="inline-flex items-center text-xs font-medium rounded-full px-3 py-1 bg-indigo-50 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200"
@@ -190,7 +198,7 @@ export default function ResultClient() {
         <div className="card-body">
           <h3 className="text-lg font-semibold">Recommended Gear for {main.label}</h3>
           <div className="mt-3 grid sm:grid-cols-2 gap-3">
-            {byAudience(baseAudiences).slice(0, 6).map((p) => (
+            {generalPicks.map((p) => (
               <a
                 key={p.id}
                 href={withAffiliateTag(p.href)}
@@ -218,7 +226,7 @@ export default function ResultClient() {
           <div className="card-body">
             <h3 className="text-lg font-semibold">For your {petKind === "multi" ? "pets" : petKind}</h3>
             <div className="mt-3 grid sm:grid-cols-2 gap-3">
-              {byAudience([petAudience]).slice(0, 6).map((p) => (
+              {petPicks.map((p) => (
                 <a
                   key={p.id}
                   href={withAffiliateTag(p.href)}
