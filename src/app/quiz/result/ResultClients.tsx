@@ -5,12 +5,12 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { QUIZ, type AnimalKey } from "../../../data/quiz";
 import { byAudience, type AudienceKey } from "../../../data/products";
-import { withAffiliateTag } from "../../../data/affiliates"; // <-- add this
+import { withAffiliateTag } from "../../../data/affiliates";
+import { trackAffiliateClick } from "../../../lib/track"; // <-- tracking
 
 type Totals = Record<AnimalKey, number>;
 const KEYS: AnimalKey[] = ["owl", "fox", "wolf", "dolphin"];
 
-// Map animal → product audiences
 const ANIMAL_TO_AUDIENCE: Record<AnimalKey, AudienceKey[]> = {
   owl: ["focus", "structure"],
   fox: ["play"],
@@ -23,7 +23,6 @@ export default function ResultClient() {
   const aParam = search.get("a") || "";
   const selected = aParam.split(",").filter(Boolean);
 
-  // Pet answer (non-scoring)
   const petIndex = QUIZ.questions.findIndex((q) => q.id === "pet");
   const petAnswerId = petIndex >= 0 ? selected[petIndex] : undefined;
   const petKind: "dog" | "cat" | "multi" | "none" =
@@ -31,7 +30,6 @@ export default function ResultClient() {
     petAnswerId === "b" ? "cat" :
     petAnswerId === "c" ? "multi" : "none";
 
-  // Score
   const { order, percents } = useMemo(() => {
     const t: Totals = { owl: 0, fox: 0, wolf: 0, dolphin: 0 };
     QUIZ.questions.forEach((q, idx) => {
@@ -42,7 +40,7 @@ export default function ResultClient() {
     });
     const sum = Math.max(1, KEYS.reduce((s, k) => s + t[k], 0));
     const perc = Object.fromEntries(
-      KEYS.map(k => [k, Math.round((t[k] / sum) * 100)])
+      KEYS.map((k) => [k, Math.round((t[k] / sum) * 100)])
     ) as Record<AnimalKey, number>;
     const ord = [...KEYS].sort((a, b) => t[b] - t[a]);
     return { order: ord, percents: perc };
@@ -53,7 +51,6 @@ export default function ResultClient() {
   const main = QUIZ.results.find((r) => r.weightKey === topKey) ?? QUIZ.results[0];
   const runner = QUIZ.results.find((r) => r.weightKey === runnerUpKey) ?? QUIZ.results[0];
 
-  // Catalog picks (general + optional pet)
   const baseAudiences = ANIMAL_TO_AUDIENCE[topKey] ?? ["focus"];
   const petAudience: AudienceKey | null =
     petKind === "dog" ? "dogs" : petKind === "cat" ? "cats" : petKind === "multi" ? "multi" : null;
@@ -65,14 +62,8 @@ export default function ResultClient() {
   const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/quiz` : "";
   const share = async () => {
     try {
-      if (navigator.share) {
-        await navigator.share({ title: "Animal Archetype", text: shareText, url: shareUrl });
-      } else {
-        window.open(
-          `https://twitter.com/intent/tweet?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`,
-          "_blank"
-        );
-      }
+      if (navigator.share) await navigator.share({ title: "Animal Archetype", text: shareText, url: shareUrl });
+      else window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`,"_blank");
     } catch {}
   };
 
@@ -95,25 +86,6 @@ export default function ResultClient() {
         </div>
       </div>
 
-      {/* Snapshot traits (optional if added to QUIZ) */}
-      {Array.isArray((main as any).traits) && (main as any).traits.length > 0 && (
-        <div className="card">
-          <div className="card-body">
-            <h3 className="text-lg font-semibold">Snapshot</h3>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {(main as any).traits.map((t: string, i: number) => (
-                <span
-                  key={i}
-                  className="inline-flex items-center text-xs font-medium rounded-full px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Percent bars */}
       <div className="card">
         <div className="card-body">
@@ -133,7 +105,7 @@ export default function ResultClient() {
         </div>
       </div>
 
-      {/* Strengths / Watch-outs */}
+      {/* Strengths / Watch-outs / Best at (render if present) */}
       <div className="grid sm:grid-cols-2 gap-3">
         {(main as any).strengths && (
           <div className="card">
@@ -163,10 +135,7 @@ export default function ResultClient() {
             <h3 className="text-lg font-semibold">You’re best at</h3>
             <div className="mt-2 flex flex-wrap gap-2">
               {(main as any).bestAt.map((b: string, i: number) => (
-                <span
-                  key={i}
-                  className="inline-flex items-center text-xs font-medium rounded-full px-3 py-1 bg-indigo-50 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200"
-                >
+                <span key={i} className="inline-flex items-center text-xs font-medium rounded-full px-3 py-1 bg-indigo-50 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200">
                   {b}
                 </span>
               ))}
@@ -175,7 +144,7 @@ export default function ResultClient() {
         </div>
       )}
 
-      {/* Recommended gear from catalog */}
+      {/* Recommended gear (tracked + tagged) */}
       <div className="card">
         <div className="card-body">
           <h3 className="text-lg font-semibold">Recommended Gear for {main.label}</h3>
@@ -183,10 +152,11 @@ export default function ResultClient() {
             {generalPicks.map((p) => (
               <a
                 key={p.id}
-                href={withAffiliateTag(p.href)}    // <-- ensure tag
+                href={withAffiliateTag(p.href)}
                 target="_blank"
                 rel="noopener noreferrer nofollow sponsored"
                 className="choice no-underline"
+                onClick={() => trackAffiliateClick({ id: p.id, vendor: p.vendor, title: p.title })} // <-- track
               >
                 <div className="flex items-center justify-between gap-3">
                   <div>
@@ -201,21 +171,20 @@ export default function ResultClient() {
         </div>
       </div>
 
-      {/* Conditional: pet picks */}
+      {/* Conditional: pet picks (tracked + tagged) */}
       {petPicks.length > 0 && (
         <div className="card">
           <div className="card-body">
-            <h3 className="text-lg font-semibold">
-              For your {petKind === "multi" ? "pets" : petKind}
-            </h3>
+            <h3 className="text-lg font-semibold">For your {petKind === "multi" ? "pets" : petKind}</h3>
             <div className="mt-3 grid sm:grid-cols-2 gap-3">
               {petPicks.map((p) => (
                 <a
                   key={p.id}
-                  href={withAffiliateTag(p.href)}  // <-- ensure tag
+                  href={withAffiliateTag(p.href)}
                   target="_blank"
                   rel="noopener noreferrer nofollow sponsored"
                   className="choice no-underline"
+                  onClick={() => trackAffiliateClick({ id: p.id, vendor: p.vendor, title: p.title })} // <-- track
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div>
@@ -236,10 +205,7 @@ export default function ResultClient() {
         <Link className="btn btn-outline" href="/quiz">Retake</Link>
         <Link className="btn btn-outline" href="/">Home</Link>
         <button className="btn btn-primary" onClick={share}>Share</button>
-        <Link
-          className="btn btn-outline"
-          href={`/shop?type=${encodeURIComponent(topKey)}&pet=${encodeURIComponent(petKind)}`}
-        >
+        <Link className="btn btn-outline" href={`/shop?type=${encodeURIComponent(topKey)}&pet=${encodeURIComponent(petKind)}`}>
           Shop your result
         </Link>
       </div>

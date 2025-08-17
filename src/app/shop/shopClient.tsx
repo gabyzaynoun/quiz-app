@@ -4,7 +4,8 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { QUIZ, type AnimalKey } from "../../data/quiz";
 import { byAudience, type AudienceKey } from "../../data/products";
-import { withAffiliateTag } from "../../data/affiliates"; // <-- add this
+import { withAffiliateTag } from "../../data/affiliates";
+import { trackAffiliateClick } from "../../lib/track"; // <-- tracking
 
 const ANIMAL_TO_AUDIENCE: Record<AnimalKey, AudienceKey[]> = {
   owl: ["focus", "structure"],
@@ -45,10 +46,11 @@ export default function ShopClient() {
             {items.map((p) => (
               <a
                 key={p.id}
-                href={withAffiliateTag(p.href)}  // <-- ensures ?tag=… on Amazon AU
+                href={withAffiliateTag(p.href)}
                 target="_blank"
                 rel="noopener noreferrer nofollow sponsored"
                 className="choice no-underline"
+                onClick={() => trackAffiliateClick({ id: p.id, vendor: p.vendor, title: p.title })} // <-- track
               >
                 <div className="flex items-center justify-between gap-3">
                   <div>
@@ -71,12 +73,8 @@ export default function ShopClient() {
       </div>
 
       <div className="flex gap-3">
-        <Link className="btn btn-outline" href="/quiz">
-          Back to quiz
-        </Link>
-        <Link className="btn btn-outline" href="/">
-          Home
-        </Link>
+        <Link className="btn btn-outline" href="/quiz">Back to quiz</Link>
+        <Link className="btn btn-outline" href="/">Home</Link>
       </div>
     </main>
   );
