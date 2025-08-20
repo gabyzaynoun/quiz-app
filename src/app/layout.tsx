@@ -33,6 +33,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="min-h-dvh bg-gradient-to-b from-slate-950 to-slate-900 text-slate-100 antialiased">
+        {/* a11y: skip link */}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[60] rounded bg-indigo-600 px-3 py-2 text-white"
+        >
+          Skip to content
+        </a>
+
         <div className="min-h-dvh flex flex-col">
           {/* Header */}
           <header className="sticky top-0 z-50 backdrop-blur-md bg-white/70 dark:bg-slate-900/60 border-b border-black/5 dark:border-white/10">
@@ -45,8 +53,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </Link>
 
               <nav className="flex items-center gap-6 text-sm text-slate-600 dark:text-slate-300">
-                <Link href="/quiz" className="hover:text-slate-900 dark:hover:text-white">
-                  Take the quiz
+                {/* Point to the new quiz hub */}
+                <Link href="/q" className="hover:text-slate-900 dark:hover:text-white">
+                  Quizzes
                 </Link>
                 <Link href="/shop" className="hover:text-slate-900 dark:hover:text-white">
                   Shop
@@ -59,7 +68,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </header>
 
           {/* Main */}
-          <main className="flex-1 max-w-3xl mx-auto px-4 py-8">{children}</main>
+          <main id="main" className="flex-1 max-w-3xl mx-auto px-4 py-8">
+            {children}
+          </main>
 
           {/* Footer */}
           <footer className="backdrop-blur-md bg-white/60 dark:bg-slate-900/50 border-t border-black/5 dark:border-white/10">
@@ -72,8 +83,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Link href="/disclosure" className="hover:underline underline-offset-4">
                   Affiliate Disclosure
                 </Link>
-                <Link href="/quiz" className="hover:underline underline-offset-4">
-                  Take the quiz
+                <Link href="/q" className="hover:underline underline-offset-4">
+                  Quizzes
                 </Link>
                 <Link href="/shop" className="hover:underline underline-offset-4">
                   Shop
@@ -83,7 +94,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </footer>
         </div>
 
-        {/* Vercel Analytics */}
         <Analytics />
       </body>
     </html>

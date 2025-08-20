@@ -1,15 +1,18 @@
+// src/app/quiz/page.tsx
 import Link from "next/link";
-import { QUIZ } from "../../data/quiz";
+import { QUIZ } from "@/data/quiz";
 
+export const metadata = { title: QUIZ.title };
 
-export default function QuizStart() {
+export default function QuizLanding() {
   return (
-    <main className="max-w-xl mx-auto p-8 space-y-6">
+    <main className="container space-y-6">
       <h1 className="text-3xl font-bold">{QUIZ.title}</h1>
-      <p className="text-gray-600">{QUIZ.description}</p>
+      <p className="text-slate-400 max-w-prose">{QUIZ.description}</p>
+
       <Link
-        href={`/quiz/0?a=`} // a = answers (we'll append as we go)
-        className="inline-block bg-black text-white px-6 py-3 rounded"
+        href="/quiz/0?a="           // ← important: /quiz/0
+        className="btn btn-primary inline-block"
       >
         Begin
       </Link>
