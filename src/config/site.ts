@@ -1,11 +1,19 @@
 const isProd = process.env.NODE_ENV === "production";
-const appUrl = process.env.NEXT_PUBLIC_SITE_URL || 
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
+const vercelUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : undefined;
+
+const appUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (isProd && vercelUrl) ||
+  "http://localhost:3000";
 
 export const SITE = {
   name: "QuizApp AU",
   url: appUrl,
-  description: "Personality quizzes with curated product recommendations for Australians",
+  description:
+    "Personality quizzes with curated product recommendations for Australians",
   twitter: "@quizappau",
   locale: "en-AU",
   currency: "AUD",
@@ -25,7 +33,8 @@ export const SEO = {
     siteName: SITE.name,
     images: [
       {
-        url: `${SITE.url}/og-image.png`,
+        // Use Next’s opengraph image route you already implemented
+        url: `${SITE.url}/opengraph-image`,
         width: 1200,
         height: 630,
         alt: SITE.name,

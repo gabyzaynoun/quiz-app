@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og";
 import { SITE } from "@/config/site";
 
@@ -41,4 +40,5 @@ export default async function OpengraphImage() {
     { ...size }
   );
 }
-export const dynamic = "force-dynamic"; // Ensure this route is always dynamic
+
+export const dynamic = "force-dynamic"; // always dynamic

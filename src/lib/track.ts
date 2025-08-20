@@ -1,5 +1,8 @@
 "use client";
 
+type Allowed = string | number | boolean;
+type Props = Record<string, Allowed>;
+
 interface TrackingEvent {
   id: string;
   vendor: string;
@@ -8,20 +11,30 @@ interface TrackingEvent {
   price?: string;
 }
 
-// Safe wrapper for Vercel Analytics
-export function trackEvent(eventName: string, data?: any) {
+// Remove null/undefined and non-primitive values so it matches @vercel/analytics
+function sanitize(data?: Record<string, unknown>): Props | undefined {
+  if (!data) return undefined;
+  const out: Record<string, Allowed> = {};
+  for (const [k, v] of Object.entries(data)) {
+    if (typeof v === "string" || typeof v === "number" || typeof v === "boolean") {
+      out[k] = v;
+    }
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
+export function trackEvent(eventName: string, data?: Record<string, unknown>) {
   try {
-    // Only track in production
     if (process.env.NODE_ENV === "production") {
-      // Check if @vercel/analytics is available
-      import("@vercel/analytics").then(({ track }) => {
-        track(eventName, data);
-      }).catch(() => {
-        // Fallback to console in dev or if analytics not available
-        console.log(`[Track] ${eventName}:`, data);
-      });
+      import("@vercel/analytics")
+        .then(({ track }) => {
+          track(eventName, sanitize(data));
+        })
+        .catch(() => {
+          console.log(`[Track] ${eventName}:`, sanitize(data));
+        });
     } else {
-      console.log(`[Track Dev] ${eventName}:`, data);
+      console.log(`[Track Dev] ${eventName}:`, sanitize(data));
     }
   } catch (error) {
     console.error("Tracking error:", error);
@@ -30,7 +43,7 @@ export function trackEvent(eventName: string, data?: any) {
 
 // Specific tracking functions
 export function trackAffiliateClick(product: TrackingEvent) {
-  trackEvent("affiliate_click", product);
+  trackEvent("affiliate_click", product as unknown as Record<string, unknown>);
 }
 
 export function trackQuizStart(quizSlug: string) {

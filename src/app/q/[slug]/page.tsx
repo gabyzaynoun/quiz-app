@@ -2,12 +2,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getQuiz } from "@/data/quizzes";
 
-export default function QuizIntro({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const quiz = getQuiz(params.slug);
+export default async function QuizIntro(
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  const { slug } = await params;
+
+  const quiz = getQuiz(slug);
   if (!quiz) return notFound();
 
   return (
@@ -16,7 +16,7 @@ export default function QuizIntro({
         <div className="card-body">
           <h1 className="text-2xl font-bold">{quiz.title}</h1>
           <p className="text-slate-400 mt-1">{quiz.description}</p>
-          
+
           <div className="mt-4 text-sm text-slate-500">
             <p>📝 {quiz.questions.length} questions</p>
             <p>⏱️ 2-3 minutes to complete</p>
