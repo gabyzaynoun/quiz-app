@@ -1,11 +1,12 @@
 import type { Quiz } from "./types";
+import { animalQuiz } from "./animal";
 import { commQuiz } from "./comm";
 import { deskQuiz } from "./desk";
 import { sleepQuiz } from "./sleep";
-import { animalQuiz } from "./animal"; // ← add this
 
+// Export all quizzes
 export const QUIZZES: Record<string, Quiz> = {
-  [animalQuiz.slug]: animalQuiz,   // ← add this line
+  [animalQuiz.slug]: animalQuiz,
   [commQuiz.slug]: commQuiz,
   [deskQuiz.slug]: deskQuiz,
   [sleepQuiz.slug]: sleepQuiz,
@@ -21,4 +22,8 @@ export function listQuizzes() {
     title: q.title,
     description: q.description
   }));
+}
+
+export function getAllQuizzes(): Quiz[] {
+  return Object.values(QUIZZES);
 }

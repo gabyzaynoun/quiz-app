@@ -1,159 +1,205 @@
-// src/data/products.ts
+import { amazonSearch, amazonDp } from "./affiliates";
 
 export type Product = {
   id: string;
   title: string;
-  href: string; // external link (tagged)
-  vendor: "amazon" | "temu" | "ebay";
-  audience: Array<"dogs" | "cats" | "multi" | "focus" | "structure" | "play">;
+  href: string;
+  vendor: "amazon" | "ebay" | "other";
+  category: string[];
+  price?: string;
   note?: string;
 };
 
-// Keep your Amazon tag in one place (AU)
-const AMAZON_TAG = "quizappau-22";
-const amazonSearch = (q: string) =>
-  `https://www.amazon.com.au/s?k=${encodeURIComponent(q)}&tag=${AMAZON_TAG}`;
-
+// Master product catalog with real ASINs where possible
 export const PRODUCTS: Product[] = [
-  // ---------- General productivity (maps to animal archetypes) ----------
+  // Headphones & Audio
   {
-    id: "noise-machine",
-    title: "White/Brown Noise Machine",
-    href: amazonSearch("white noise machine"),
+    id: "sony-xm5",
+    title: "Sony WH-1000XM5",
+    href: amazonDp("B09XS7JWHH"),
     vendor: "amazon",
-    audience: ["focus"],
-    note: "Pick LectroFan, SNOOZ, or similar.",
+    category: ["audio", "productivity"],
+    price: "$549",
+    note: "Industry-leading noise cancellation"
   },
   {
-    id: "anc-headphones",
-    title: "ANC Headphones",
-    href: amazonSearch("noise cancelling headphones"),
+    id: "airpods-pro",
+    title: "Apple AirPods Pro",
+    href: amazonDp("B0D1XB1XX3"),
     vendor: "amazon",
-    audience: ["focus"],
-    note: "Deep work staple.",
+    category: ["audio", "portable"],
+    price: "$399",
+    note: "Seamless Apple integration"
+  },
+  
+  // Desks & Furniture
+  {
+    id: "standing-desk",
+    title: "Flexispot E7 Standing Desk",
+    href: amazonSearch("Flexispot E7 standing desk"),
+    vendor: "amazon",
+    category: ["furniture", "ergonomic"],
+    price: "$799",
+    note: "Dual motor, programmable heights"
   },
   {
-    id: "a5-dotted-notebook",
-    title: "A5 Dotted Notebook",
-    href: amazonSearch("Leuchtturm1917 A5 dotted"),
+    id: "herman-miller-aeron",
+    title: "Herman Miller Aeron",
+    href: amazonSearch("Herman Miller Aeron chair"),
     vendor: "amazon",
-    audience: ["structure"],
-    note: "Great for bullet journaling.",
+    category: ["furniture", "ergonomic"],
+    price: "$1995",
+    note: "The gold standard office chair"
+  },
+  
+  // Monitors & Display
+  {
+    id: "dell-ultrawide",
+    title: "Dell S3422DWG Ultrawide",
+    href: amazonDp("B095X7RV77"),
+    vendor: "amazon",
+    category: ["display", "productivity"],
+    price: "$699",
+    note: "34-inch curved productivity"
   },
   {
-    id: "pomodoro-cube",
-    title: "Pomodoro Cube Timer",
-    href: amazonSearch("cube timer pomodoro"),
+    id: "lg-4k-monitor",
+    title: "LG 27\" 4K Monitor",
+    href: amazonDp("B07TFQ74JJ"),
     vendor: "amazon",
-    audience: ["structure"],
-    note: "Flip to set 5/15/25/45-min sprints.",
+    category: ["display", "creative"],
+    price: "$499",
+    note: "Color accurate for design"
+  },
+  
+  // Keyboards & Input
+  {
+    id: "keychron-k2",
+    title: "Keychron K2 Wireless",
+    href: amazonSearch("Keychron K2 wireless mechanical"),
+    vendor: "amazon",
+    category: ["input", "tech"],
+    price: "$169",
+    note: "Hot-swappable mechanical"
   },
   {
-    id: "time-timer-mod",
-    title: "Time Timer MOD",
-    href: amazonSearch("Time Timer MOD"),
+    id: "mx-master-3s",
+    title: "Logitech MX Master 3S",
+    href: amazonDp("B0C6Z7KSMW"),
     vendor: "amazon",
-    audience: ["structure"],
-    note: "Visual deadline bar.",
+    category: ["input", "productivity"],
+    price: "$149",
+    note: "Best productivity mouse"
+  },
+  
+  // Sleep & Wellness
+  {
+    id: "white-noise-machine",
+    title: "LectroFan White Noise",
+    href: amazonSearch("LectroFan white noise machine"),
+    vendor: "amazon",
+    category: ["sleep", "wellness"],
+    price: "$89",
+    note: "20 unique fan & white noise sounds"
   },
   {
-    id: "glass-desk-whiteboard",
-    title: "Glass Desktop Whiteboard",
-    href: amazonSearch("glass desktop whiteboard"),
+    id: "philips-sunrise",
+    title: "Philips Wake-Up Light",
+    href: amazonDp("B08V5C7QGM"),
     vendor: "amazon",
-    audience: ["structure"],
-    note: "Day plan at a glance.",
+    category: ["sleep", "wellness"],
+    price: "$199",
+    note: "Simulated sunrise alarm"
   },
   {
-    id: "led-light-bars",
-    title: "Smart LED Light Bars",
-    href: amazonSearch("Govee light bars"),
+    id: "weighted-blanket",
+    title: "Gravity Weighted Blanket",
+    href: amazonSearch("Gravity weighted blanket 7kg"),
     vendor: "amazon",
-    audience: ["play"],
-    note: "Ambient lighting for ideation.",
+    category: ["sleep", "wellness"],
+    price: "$249",
+    note: "Reduces anxiety, improves sleep"
+  },
+  
+  // Organization
+  {
+    id: "cable-management",
+    title: "J Channel Cable Raceway",
+    href: amazonDp("B07D8XLNZ2"),
+    vendor: "amazon",
+    category: ["organization", "setup"],
+    price: "$39",
+    note: "Hide all desk cables"
   },
   {
-    id: "fidget-clicker",
-    title: "Quiet Fidget Clicker",
-    href: amazonSearch("quiet fidget clicker"),
+    id: "desk-organizer",
+    title: "Bamboo Desktop Organizer",
+    href: amazonSearch("bamboo desktop organizer"),
     vendor: "amazon",
-    audience: ["play"],
-    note: "Keeps hands busy on calls.",
+    category: ["organization", "minimal"],
+    price: "$59",
+    note: "Sustainable organization"
   },
-
-  // --------------------- Dogs ---------------------
+  
+  // Lighting
   {
-    id: "dog-tug-rope",
-    title: "Tug Rope Toy",
-    href: amazonSearch("dog tug rope toy"),
+    id: "benq-screenbar",
+    title: "BenQ ScreenBar Halo",
+    href: amazonDp("B0C4TNMMQT"),
     vendor: "amazon",
-    audience: ["dogs"],
-  },
-  {
-    id: "dog-no-pull-harness",
-    title: "No-Pull Harness",
-    href: amazonSearch("no pull dog harness"),
-    vendor: "amazon",
-    audience: ["dogs"],
+    category: ["lighting", "ergonomic"],
+    price: "$249",
+    note: "No screen glare monitor light"
   },
   {
-    id: "dog-slow-feeder",
-    title: "Slow Feeder Bowl",
-    href: amazonSearch("slow feeder dog bowl"),
+    id: "philips-hue",
+    title: "Philips Hue Go",
+    href: amazonDp("B0CN7NQMPX"),
     vendor: "amazon",
-    audience: ["dogs"],
+    category: ["lighting", "creative"],
+    price: "$199",
+    note: "Portable smart mood lighting"
   },
-
-  // --------------------- Cats ---------------------
+  
+  // Tech Accessories
   {
-    id: "cat-feather-wand",
-    title: "Feather Wand Toy",
-    href: amazonSearch("cat feather wand toy"),
+    id: "caldigit-ts4",
+    title: "CalDigit TS4 Dock",
+    href: amazonSearch("CalDigit TS4 Thunderbolt dock"),
     vendor: "amazon",
-    audience: ["cats"],
-  },
-  {
-    id: "cat-tunnel",
-    title: "Collapsible Cat Tunnel",
-    href: amazonSearch("cat tunnel"),
-    vendor: "amazon",
-    audience: ["cats"],
+    category: ["tech", "connectivity"],
+    price: "$599",
+    note: "18 ports, 98W charging"
   },
   {
-    id: "cat-fountain",
-    title: "Cat Water Fountain",
-    href: amazonSearch("cat water fountain"),
+    id: "stream-deck",
+    title: "Elgato Stream Deck MK.2",
+    href: amazonDp("B09QT8YP5L"),
     vendor: "amazon",
-    audience: ["cats"],
-  },
-
-  // --------------------- Multi-pet / Home ---------------------
-  {
-    id: "pet-grooming-glove",
-    title: "Pet Grooming Glove",
-    href: amazonSearch("pet grooming glove"),
-    vendor: "amazon",
-    audience: ["multi"],
-  },
-  {
-    id: "indoor-pet-cam",
-    title: "Indoor Pet Camera 1080p",
-    href: amazonSearch("indoor pet camera 1080p"),
-    vendor: "amazon",
-    audience: ["multi"],
-  },
-  {
-    id: "enzymatic-cleaner",
-    title: "Enzymatic Stain Remover",
-    href: amazonSearch("enzymatic pet stain remover"),
-    vendor: "amazon",
-    audience: ["multi"],
-  },
+    category: ["tech", "productivity"],
+    price: "$249",
+    note: "15 customizable LCD keys"
+  }
 ];
 
-export type AudienceKey = Product["audience"][number];
+// Helper functions to get products by category
+export function getProductsByCategory(categories: string[]): Product[] {
+  return PRODUCTS.filter(p => 
+    p.category.some(cat => categories.includes(cat))
+  );
+}
 
-// Filter by audiences (e.g., ['dogs'] or ['focus'])
-export function byAudience(keys: AudienceKey[]) {
-  return PRODUCTS.filter((p) => p.audience.some((a) => keys.includes(a)));
+export function getProductById(id: string): Product | undefined {
+  return PRODUCTS.find(p => p.id === id);
+}
+
+// Get recommended products based on quiz results
+export function getRecommendedProducts(
+  productIds: string[], 
+  limit: number = 4
+): Product[] {
+  const products = productIds
+    .map(id => getProductById(id))
+    .filter(Boolean) as Product[];
+  return products.slice(0, limit);
 }

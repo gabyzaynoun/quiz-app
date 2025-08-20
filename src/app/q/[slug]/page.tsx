@@ -16,19 +16,24 @@ export default function QuizIntro({
         <div className="card-body">
           <h1 className="text-2xl font-bold">{quiz.title}</h1>
           <p className="text-slate-400 mt-1">{quiz.description}</p>
+          
+          <div className="mt-4 text-sm text-slate-500">
+            <p>📝 {quiz.questions.length} questions</p>
+            <p>⏱️ 2-3 minutes to complete</p>
+            <p>🎯 Get personalized recommendations</p>
+          </div>
 
-          {/* First question index is 0, we pass an empty 'a' param to start */}
           <Link
             href={`/q/${quiz.slug}/0?a=`}
             className="btn btn-primary mt-4 inline-block"
           >
-            Begin
+            Start Quiz
           </Link>
         </div>
       </div>
 
       <Link href="/q" className="text-sm text-slate-400 hover:underline">
-        ← All quizzes
+        ← Back to all quizzes
       </Link>
     </main>
   );
