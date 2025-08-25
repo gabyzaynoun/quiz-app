@@ -8,6 +8,15 @@ import { getQuiz } from "@/data/quizzes";
 import { withAffiliateTag } from "@/data/affiliates";
 import { trackAffiliateClick } from "@/lib/track";
 
+// Define the product type
+interface Product {
+  id: string;
+  title: string;
+  href: string;
+  subtitle?: string;
+  category?: string;
+}
+
 function ResultContent() {
   const params = useParams<{ slug: string }>();
   const searchParams = useSearchParams();
@@ -89,12 +98,13 @@ function ResultContent() {
       ? `${window.location.origin}/q/${quiz.slug}`
       : "";
 
-  const handleProductClick = (product: any) => {
+  // Fixed: Added proper type instead of any
+  const handleProductClick = (product: Product) => {
     trackAffiliateClick({
       vendor: "amazon",
       id: product.id,
       title: product.title,
-      category: `quiz-${quiz.slug}`,
+      category: product.category || `quiz-${quiz.slug}`,
     });
   };
 

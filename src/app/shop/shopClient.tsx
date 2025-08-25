@@ -6,14 +6,23 @@ import Link from "next/link";
 import { withAffiliateTag } from "@/data/affiliates";
 import { trackAffiliateClick } from "@/lib/track";
 
+// Define the product type
+interface ShopProduct {
+  id: string;
+  title: string;
+  category: string;
+  href: string;
+  note: string;
+}
+
 // Comprehensive product catalog - with fixes for broken links
-const SHOP_PRODUCTS = [
+const SHOP_PRODUCTS: ShopProduct[] = [
   // Productivity
   {
     id: "anc-headphones",
     title: "Sony WH-1000XM5",
     category: "productivity",
-    href: "https://www.amazon.com.au/s?k=Sony+WH-1000XM5+noise+cancelling+headphones", // Fixed: using search instead of direct link
+    href: "https://www.amazon.com.au/s?k=Sony+WH-1000XM5+noise+cancelling+headphones",
     note: "Best noise cancelling",
   },
   {
@@ -27,7 +36,7 @@ const SHOP_PRODUCTS = [
     id: "time-timer",
     title: "Time Timer MOD",
     category: "productivity",
-    href: "https://www.amazon.com.au/s?k=time+timer+visual+countdown", // Fixed: using search for visual timers
+    href: "https://www.amazon.com.au/s?k=time+timer+visual+countdown",
     note: "Visual countdown",
   },
 
@@ -159,7 +168,8 @@ export default function ShopClient() {
     }
   });
 
-  const handleProductClick = (product: any) => {
+  // Fixed: Added proper type instead of any
+  const handleProductClick = (product: ShopProduct) => {
     trackAffiliateClick({
       vendor: "amazon",
       id: product.id,
@@ -178,25 +188,24 @@ export default function ShopClient() {
             Blueprints for Owl/Fox/Wolf/Dolphin. Exact heights, distances, and a 5-minute fit test. Instant download.
           </p>
           <a
-            href="https://gabyzx45.gumroad.com/l/uedfhc?utm_campaign=quizapp_au&utm_source=shop_page&utm_medium=cta&utm_content=deskpack_primary"
+            href="https://gabyzx45.gumroad.com/l/uedfhc?utm_campaign=quizapp_au&utm_source=shop_page&utm_medium=cta&utm_content=deskpack_hero"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+            className="inline-block bg-white text-purple-600 px-4 py-2 rounded-lg font-semibold hover:bg-white/90 transition-colors"
           >
-            Get the Pack — A$14.90
+            Get Your Setup Blueprint →
           </a>
         </div>
       </div>
 
-      {/* Filter and Sort Controls */}
+      {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
-        {/* Category Filter */}
         <div className="flex-1">
           <label className="block text-sm font-medium mb-2">Category</label>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-100"
+            className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg"
           >
             {CATEGORIES.map((cat) => (
               <option key={cat.id} value={cat.id}>
@@ -205,18 +214,16 @@ export default function ShopClient() {
             ))}
           </select>
         </div>
-
-        {/* Sort */}
         <div className="flex-1">
           <label className="block text-sm font-medium mb-2">Sort By</label>
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-100"
+            className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg"
           >
-            {SORT_OPTIONS.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.label}
+            {SORT_OPTIONS.map((opt) => (
+              <option key={opt.id} value={opt.id}>
+                {opt.label}
               </option>
             ))}
           </select>
@@ -232,25 +239,42 @@ export default function ShopClient() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => handleProductClick(product)}
-            className="block p-4 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-indigo-500 transition-all hover:scale-105"
+            className="block p-4 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 transition-colors"
           >
-            <h3 className="font-semibold text-lg mb-1">{product.title}</h3>
+            <h3 className="font-semibold mb-1">{product.title}</h3>
             <p className="text-sm text-slate-400 mb-2">{product.note}</p>
-            <span className="text-xs text-indigo-400 uppercase tracking-wide">
-              {product.category}
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-slate-500 capitalize">
+                {product.category}
+              </span>
+              <span className="text-indigo-400">View →</span>
+            </div>
           </a>
         ))}
       </div>
 
-      {/* Info */}
-      <div className="text-sm text-slate-400 text-center border-t border-slate-700 pt-6">
-        <p>
-          As an Amazon Associate we earn from qualifying purchases.{" "}
-          <Link href="/disclosure" className="underline">
-            Learn more
-          </Link>
-        </p>
+      {/* Empty State */}
+      {sortedProducts.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-slate-400">
+            No products found in this category.
+          </p>
+        </div>
+      )}
+
+      {/* FAQ Section */}
+      <div className="mt-12 p-6 bg-slate-800/50 rounded-lg">
+        <h2 className="text-xl font-bold mb-4">About Our Recommendations</h2>
+        <div className="space-y-3 text-sm text-slate-300">
+          <p>
+            All products are carefully selected based on quality, value, and user reviews.
+            We earn a small commission from qualifying purchases at no extra cost to you.
+          </p>
+          <p>
+            Prices shown are approximate and may vary. Click through to see current pricing
+            and availability on Amazon AU.
+          </p>
+        </div>
       </div>
     </div>
   );
