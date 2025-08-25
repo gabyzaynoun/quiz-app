@@ -1,3 +1,4 @@
+// src/config/site.ts
 const isProd = process.env.NODE_ENV === "production";
 
 const vercelUrl = process.env.VERCEL_URL
@@ -10,11 +11,11 @@ const appUrl =
   "http://localhost:3000";
 
 export const SITE = {
-  name: "QuizApp AU",
+  name: "Find By Type",
   url: appUrl,
   description:
-    "Personality quizzes with curated product recommendations for Australians",
-  twitter: "@quizappau",
+    "Discover your productivity type and get personalized workspace recommendations for Australians",
+  twitter: "@findbytype",
   locale: "en-AU",
   currency: "AUD",
 };
@@ -33,7 +34,7 @@ export const SEO = {
     siteName: SITE.name,
     images: [
       {
-        // Use Next’s opengraph image route you already implemented
+        // Use Next's opengraph image route you already implemented
         url: `${SITE.url}/opengraph-image`,
         width: 1200,
         height: 630,

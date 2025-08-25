@@ -1,3 +1,4 @@
+// src/app/shop/shopClient.tsx
 "use client";
 
 import { useState } from "react";
@@ -5,15 +6,14 @@ import Link from "next/link";
 import { withAffiliateTag } from "@/data/affiliates";
 import { trackAffiliateClick } from "@/lib/track";
 
-// Comprehensive product catalog
+// Comprehensive product catalog - with fixes for broken links
 const SHOP_PRODUCTS = [
   // Productivity
   {
     id: "anc-headphones",
     title: "Sony WH-1000XM5",
     category: "productivity",
-    href: "https://www.amazon.com.au/dp/B09XS7JWHH",
-    price: "$549",
+    href: "https://www.amazon.com.au/s?k=Sony+WH-1000XM5+noise+cancelling+headphones", // Fixed: using search instead of direct link
     note: "Best noise cancelling",
   },
   {
@@ -21,15 +21,13 @@ const SHOP_PRODUCTS = [
     title: "Flexispot E7 Standing Desk",
     category: "productivity",
     href: "https://www.amazon.com.au/s?k=flexispot+e7+standing+desk",
-    price: "$799",
     note: "Electric height adjust",
   },
   {
     id: "time-timer",
     title: "Time Timer MOD",
     category: "productivity",
-    href: "https://www.amazon.com.au/dp/B01COEZM1M",
-    price: "$49",
+    href: "https://www.amazon.com.au/s?k=time+timer+visual+countdown", // Fixed: using search for visual timers
     note: "Visual countdown",
   },
 
@@ -39,7 +37,6 @@ const SHOP_PRODUCTS = [
     title: "Ergonomic Task Chair",
     category: "ergonomic",
     href: "https://www.amazon.com.au/s?k=ergonomic+task+chair",
-    price: "$899",
     note: "All-day comfort",
   },
   {
@@ -47,7 +44,6 @@ const SHOP_PRODUCTS = [
     title: "Ergotron LX Monitor Arm",
     category: "ergonomic",
     href: "https://www.amazon.com.au/s?k=ergotron+lx+monitor+arm",
-    price: "$289",
     note: "Full adjustability",
   },
   {
@@ -55,7 +51,6 @@ const SHOP_PRODUCTS = [
     title: "Adjustable Footrest",
     category: "ergonomic",
     href: "https://www.amazon.com.au/s?k=adjustable+footrest",
-    price: "$79",
     note: "Improve posture",
   },
 
@@ -65,7 +60,6 @@ const SHOP_PRODUCTS = [
     title: "Logitech Brio 4K",
     category: "tech",
     href: "https://www.amazon.com.au/s?k=logitech+brio+4k",
-    price: "$329",
     note: "Crystal clear video",
   },
   {
@@ -73,7 +67,6 @@ const SHOP_PRODUCTS = [
     title: "CalDigit TS4 Dock",
     category: "tech",
     href: "https://www.amazon.com.au/s?k=caldigit+ts4",
-    price: "$599",
     note: "18 ports total",
   },
   {
@@ -81,7 +74,6 @@ const SHOP_PRODUCTS = [
     title: "Keychron K2 Wireless",
     category: "tech",
     href: "https://www.amazon.com.au/s?k=keychron+k2",
-    price: "$169",
     note: "Hot-swappable",
   },
 
@@ -91,7 +83,6 @@ const SHOP_PRODUCTS = [
     title: "LectroFan White Noise",
     category: "sleep",
     href: "https://www.amazon.com.au/s?k=lectrofan+white+noise",
-    price: "$89",
     note: "20 unique sounds",
   },
   {
@@ -99,7 +90,6 @@ const SHOP_PRODUCTS = [
     title: "Philips Wake-Up Light",
     category: "sleep",
     href: "https://www.amazon.com.au/s?k=philips+wake+up+light",
-    price: "$199",
     note: "Natural wake-up",
   },
   {
@@ -107,7 +97,6 @@ const SHOP_PRODUCTS = [
     title: "Gravity Weighted Blanket",
     category: "sleep",
     href: "https://www.amazon.com.au/s?k=gravity+weighted+blanket",
-    price: "$249",
     note: "Reduces anxiety",
   },
 
@@ -117,7 +106,6 @@ const SHOP_PRODUCTS = [
     title: "Cable Management Kit",
     category: "organization",
     href: "https://www.amazon.com.au/s?k=cable+management+kit",
-    price: "$39",
     note: "Complete solution",
   },
   {
@@ -125,15 +113,13 @@ const SHOP_PRODUCTS = [
     title: "Bamboo Desk Organizer",
     category: "organization",
     href: "https://www.amazon.com.au/s?k=bamboo+desk+organizer",
-    price: "$59",
-    note: "Eco-friendly",
+    note: "Natural materials",
   },
   {
     id: "label-maker",
-    title: "Brother P-Touch Label",
+    title: "Brother P-Touch Label Maker",
     category: "organization",
-    href: "https://www.amazon.com.au/s?k=brother+p-touch",
-    price: "$79",
+    href: "https://www.amazon.com.au/s?k=brother+p-touch+label+maker",
     note: "Professional labels",
   },
 ];
@@ -143,8 +129,15 @@ const CATEGORIES = [
   { id: "productivity", label: "Productivity" },
   { id: "ergonomic", label: "Ergonomics" },
   { id: "tech", label: "Tech Setup" },
-  { id: "sleep", label: "Sleep" },
+  { id: "sleep", label: "Sleep & Recovery" },
   { id: "organization", label: "Organization" },
+];
+
+// Sort options - removed price sort since we're not showing prices
+const SORT_OPTIONS = [
+  { id: "featured", label: "Featured" },
+  { id: "name", label: "Name (A-Z)" },
+  { id: "category", label: "Category" },
 ];
 
 export default function ShopClient() {
@@ -156,118 +149,109 @@ export default function ShopClient() {
   );
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortBy === "price-low") {
-      return (
-        parseInt(a.price.replace(/\D/g, ""), 10) -
-        parseInt(b.price.replace(/\D/g, ""), 10)
-      );
+    switch (sortBy) {
+      case "name":
+        return a.title.localeCompare(b.title);
+      case "category":
+        return a.category.localeCompare(b.category);
+      default:
+        return 0;
     }
-    if (sortBy === "price-high") {
-      return (
-        parseInt(b.price.replace(/\D/g, ""), 10) -
-        parseInt(a.price.replace(/\D/g, ""), 10)
-      );
-    }
-    return 0; // featured (default order)
   });
 
+  const handleProductClick = (product: any) => {
+    trackAffiliateClick({
+      vendor: "amazon",
+      id: product.id,
+      title: product.title,
+      category: product.category,
+    });
+  };
+
   return (
-    <main className="container space-y-6">
-      <div className="card">
-        <div className="card-body">
-          <h1 className="text-3xl font-bold">Productivity Shop</h1>
-          <p className="text-slate-400 mt-2">
-            Curated gear to optimize your work and life. All products available
-            on Amazon AU.
+    <div className="space-y-8">
+      {/* Desk Setup Pack CTA */}
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg p-6 text-white">
+        <div className="space-y-3">
+          <h2 className="text-xl font-bold">Desk Setup Pack by Type (AU)</h2>
+          <p className="text-white/90">
+            Blueprints for Owl/Fox/Wolf/Dolphin. Exact heights, distances, and a 5-minute fit test. Instant download.
           </p>
+          <a
+            href="https://gabyzx45.gumroad.com/l/uedfhc?utm_campaign=quizapp_au&utm_source=shop_page&utm_medium=cta&utm_content=deskpack_primary"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+          >
+            Get the Pack — A$14.90
+          </a>
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="card">
-        <div className="card-body">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
-              <label className="text-xs text-slate-500">Category</label>
-              <div className="flex flex-wrap gap-2 mt-1">
-                {CATEGORIES.map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
-                    className={`px-3 py-1 rounded text-sm transition ${
-                      selectedCategory === cat.id
-                        ? "bg-indigo-600 text-white"
-                        : "bg-slate-700 hover:bg-slate-600"
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>
-              <label className="text-xs text-slate-500">Sort</label>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="block mt-1 px-3 py-1 bg-slate-700 rounded text-sm"
-              >
-                <option value="featured">Featured</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-              </select>
-            </div>
-          </div>
+      {/* Filter and Sort Controls */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        {/* Category Filter */}
+        <div className="flex-1">
+          <label className="block text-sm font-medium mb-2">Category</label>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-100"
+          >
+            {CATEGORIES.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Sort */}
+        <div className="flex-1">
+          <label className="block text-sm font-medium mb-2">Sort By</label>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-100"
+          >
+            {SORT_OPTIONS.map((option) => (
+              <option key={option.id} value={option.id}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
-      {/* Products Grid */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Product Grid */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {sortedProducts.map((product) => (
-          <div key={product.id} className="card hover:shadow-lg transition-shadow">
-            <div className="card-body">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-semibold">{product.title}</h3>
-                <span className="text-lg font-bold text-indigo-400">
-                  {product.price}
-                </span>
-              </div>
-              <p className="text-sm text-slate-400 mb-3">{product.note}</p>
-              <div className="text-xs text-slate-500 mb-3">
-                Category: {product.category}
-              </div>
-              <a
-                href={withAffiliateTag(product.href)}
-                target="_blank"
-                rel="noopener noreferrer nofollow sponsored"
-                className="btn btn-primary w-full text-center"
-                onClick={() =>
-                  trackAffiliateClick({
-                    id: product.id,
-                    vendor: "amazon",
-                    title: product.title,
-                  })
-                }
-              >
-                View on Amazon →
-              </a>
-            </div>
-          </div>
+          <a
+            key={product.id}
+            href={withAffiliateTag(product.href)}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => handleProductClick(product)}
+            className="block p-4 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-indigo-500 transition-all hover:scale-105"
+          >
+            <h3 className="font-semibold text-lg mb-1">{product.title}</h3>
+            <p className="text-sm text-slate-400 mb-2">{product.note}</p>
+            <span className="text-xs text-indigo-400 uppercase tracking-wide">
+              {product.category}
+            </span>
+          </a>
         ))}
       </div>
 
-      {/* CTA */}
-      <div className="card bg-gradient-to-r from-indigo-900/50 to-purple-900/50">
-        <div className="card-body text-center">
-          <h3 className="text-xl font-semibold mb-2">Not sure what you need?</h3>
-          <p className="text-slate-300 mb-4">
-            Take our quizzes to get personalized recommendations
-          </p>
-          <Link href="/q" className="btn btn-primary inline-block">
-            Take a Quiz →
+      {/* Info */}
+      <div className="text-sm text-slate-400 text-center border-t border-slate-700 pt-6">
+        <p>
+          As an Amazon Associate we earn from qualifying purchases.{" "}
+          <Link href="/disclosure" className="underline">
+            Learn more
           </Link>
-        </div>
+        </p>
       </div>
-    </main>
+    </div>
   );
 }

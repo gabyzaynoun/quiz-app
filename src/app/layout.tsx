@@ -53,15 +53,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </Link>
 
               <nav className="flex items-center gap-6 text-sm text-slate-600 dark:text-slate-300">
-                {/* Point to the new quiz hub */}
                 <Link href="/q" className="hover:text-slate-900 dark:hover:text-white">
                   Quizzes
                 </Link>
                 <Link href="/shop" className="hover:text-slate-900 dark:hover:text-white">
                   Shop
                 </Link>
+                <Link href="/links" className="hover:text-slate-900 dark:hover:text-white">
+                  Links
+                </Link>
                 <Link href="/disclosure" className="hover:text-slate-900 dark:hover:text-white">
-                  Disclosure
+                  About
                 </Link>
               </nav>
             </div>
@@ -88,6 +90,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </Link>
                 <Link href="/shop" className="hover:underline underline-offset-4">
                   Shop
+                </Link>
+                <Link href="/links" className="hover:underline underline-offset-4">
+                  Links
                 </Link>
               </div>
             </div>

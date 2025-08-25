@@ -1,3 +1,4 @@
+// src/app/q/[slug]/result/page.tsx
 "use client";
 
 import { useMemo, Suspense } from "react";
@@ -88,132 +89,148 @@ function ResultContent() {
       ? `${window.location.origin}/q/${quiz.slug}`
       : "";
 
-  const handleShare = async () => {
-    try {
-      if (navigator.share) {
-        await navigator.share({
-          title: quiz.title,
-          text: shareText,
-          url: shareUrl,
-        });
-      } else {
-        window.open(
-          `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-            `${shareText} ${shareUrl}`
-          )}`,
-          "_blank"
-        );
-      }
-    } catch {
-      // noop
+  const handleProductClick = (product: any) => {
+    trackAffiliateClick({
+      vendor: "amazon",
+      id: product.id,
+      title: product.title,
+      category: `quiz-${quiz.slug}`,
+    });
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: quiz.title,
+        text: shareText,
+        url: shareUrl,
+      });
+    } else {
+      navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
+      alert("Link copied!");
     }
   };
 
   return (
-    <main className="container space-y-6">
-      {/* Result card */}
-      <div className="card" style={{ boxShadow: "var(--shadow-soft)" }}>
-        <div className="card-body">
-          <div className="text-xs text-slate-500">Your Result</div>
-          <h1 className="text-3xl font-extrabold mt-1">{result.label}</h1>
-          <p className="text-slate-300 mt-2">{result.description}</p>
-
-          {!!result.tips?.length && (
-            <>
-              <h3 className="text-lg font-semibold mt-4">Tips for You</h3>
-              <ul className="mt-2 list-disc pl-5 text-slate-300 space-y-1">
-                {result.tips.map((tip, i) => (
-                  <li key={i}>{tip}</li>
-                ))}
-              </ul>
-            </>
-          )}
+    <main className="p-4 space-y-6">
+      {/* Desk Setup Pack Banner - Only show for animal quiz */}
+      {quiz.slug === "animal" && (
+        <div className="bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg p-4 text-white">
+          <p className="text-sm font-medium mb-1">
+            New: Desk Setup Pack — exact heights & a 5-minute fit test for your type.
+          </p>
+          <a
+            href="https://gabyzx45.gumroad.com/l/uedfhc?utm_campaign=quizapp_au&utm_source=results_page&utm_medium=cta&utm_content=deskpack_primary"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block text-white underline hover:no-underline text-sm"
+          >
+            Get your personalized workspace blueprint →
+          </a>
         </div>
-      </div>
+      )}
 
-      {/* Score breakdown */}
+      {/* Main Result Card */}
       <div className="card">
-        <div className="card-body">
-          <h3 className="text-lg font-semibold mb-4">Score Breakdown</h3>
-          <div className="grid gap-3">
+        <div className="card-body space-y-4">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-2">Your Result</h1>
+            <div className="text-3xl font-bold text-indigo-500 mb-2">
+              {result.label}
+            </div>
+            <p className="text-slate-300">{result.description}</p>
+          </div>
+
+          {/* Score Breakdown */}
+          <div className="space-y-2 pt-4 border-t border-slate-700">
+            <h3 className="font-semibold mb-2">Score Breakdown</h3>
             {quiz.weightKeys.map((key) => {
-              const r = quiz.results.find((res) => res.weightKey === key);
+              const res = quiz.results.find((r) => r.weightKey === key);
+              const pct = percentages[key] || 0;
               return (
-                <div key={key}>
-                  <div className="flex justify-between text-xs text-slate-500 mb-1">
-                    <span>{r?.label ?? key}</span>
-                    <span>{percentages[key] ?? 0}%</span>
-                  </div>
-                  <div className="progress">
+                <div key={key} className="flex items-center gap-3">
+                  <span className="w-24 text-sm">{res?.label || key}</span>
+                  <div className="flex-1 bg-slate-700 rounded-full h-2">
                     <div
-                      className="progress__bar"
-                      style={{ width: `${percentages[key] ?? 0}%` }}
+                      className="bg-indigo-500 h-2 rounded-full transition-all"
+                      style={{ width: `${pct}%` }}
                     />
                   </div>
+                  <span className="text-sm w-10 text-right">{pct}%</span>
                 </div>
               );
             })}
           </div>
-        </div>
-      </div>
 
-      {/* Recommended products */}
-      {!!result.products?.length && (
-        <div className="card">
-          <div className="card-body">
-            <h3 className="text-lg font-semibold mb-4">
-              Recommended for {result.label}
-            </h3>
-            <div className="grid sm:grid-cols-2 gap-3">
-              {result.products.map((product) => (
-                <a
-                  key={product.id}
-                  href={withAffiliateTag(product.href)}
-                  target="_blank"
-                  rel="noopener noreferrer nofollow sponsored"
-                  className="choice no-underline"
-                  onClick={() =>
-                    trackAffiliateClick({
-                      id: product.id,
-                      vendor: "amazon",
-                      title: product.title,
-                    })
-                  }
-                >
-                  <div className="flex items-center justify-between gap-3">
+          {/* Tips */}
+          {result.tips && result.tips.length > 0 && (
+            <div className="space-y-2 pt-4 border-t border-slate-700">
+              <h3 className="font-semibold">Tips for You</h3>
+              <ul className="space-y-1">
+                {result.tips.map((tip, i) => (
+                  <li key={i} className="flex gap-2 text-sm text-slate-300">
+                    <span className="text-indigo-400">•</span>
+                    <span>{tip}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Product Recommendations */}
+          {result.products && result.products.length > 0 && (
+            <div className="space-y-2 pt-4 border-t border-slate-700">
+              <h3 className="font-semibold">Recommended Gear</h3>
+              <div className="grid gap-3">
+                {result.products.map((product) => (
+                  <a
+                    key={product.id}
+                    href={withAffiliateTag(product.href)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => handleProductClick(product)}
+                    className="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors"
+                  >
                     <div>
                       <div className="font-medium">{product.title}</div>
                       {product.subtitle && (
-                        <div className="text-xs text-slate-400">
+                        <div className="text-sm text-slate-400">
                           {product.subtitle}
                         </div>
                       )}
                     </div>
-                    <span className="text-xs font-semibold px-2 py-1 rounded bg-indigo-600 text-white">
-                      View
-                    </span>
-                  </div>
-                </a>
-              ))}
+                    <span className="text-indigo-400">→</span>
+                  </a>
+                ))}
+              </div>
             </div>
+          )}
+
+          {/* Actions */}
+          <div className="flex gap-3 pt-4">
+            <button onClick={handleShare} className="btn btn-primary flex-1">
+              Share Result
+            </button>
+            <Link href={`/q/${quiz.slug}`} className="btn btn-outline flex-1">
+              Retake Quiz
+            </Link>
           </div>
         </div>
-      )}
+      </div>
 
-      {/* Actions */}
-      <div className="flex flex-wrap gap-3">
-        <Link className="btn btn-outline" href={`/q/${quiz.slug}`}>
-          Retake Quiz
-        </Link>
-        <Link className="btn btn-outline" href="/q">
-          Try Another Quiz
-        </Link>
-        <button className="btn btn-primary" onClick={handleShare}>
-          Share Result
-        </button>
-        <Link className="btn btn-outline" href="/shop">
-          Browse Shop
-        </Link>
+      {/* More Quizzes */}
+      <div className="card">
+        <div className="card-body">
+          <h3 className="font-semibold mb-3">Try Another Quiz</h3>
+          <div className="space-y-2">
+            <Link
+              href="/q"
+              className="block p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors"
+            >
+              <span className="text-indigo-400">→</span> Browse All Quizzes
+            </Link>
+          </div>
+        </div>
       </div>
     </main>
   );
@@ -221,7 +238,17 @@ function ResultContent() {
 
 export default function ResultPage() {
   return (
-    <Suspense fallback={<div className="p-6">Loading result...</div>}>
+    <Suspense
+      fallback={
+        <main className="p-6">
+          <div className="card">
+            <div className="card-body">
+              <div className="text-center">Loading results...</div>
+            </div>
+          </div>
+        </main>
+      }
+    >
       <ResultContent />
     </Suspense>
   );
