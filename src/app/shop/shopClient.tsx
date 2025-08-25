@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+
 import { withAffiliateTag } from "@/data/affiliates";
 import { trackAffiliateClick } from "@/lib/track";
 
