@@ -48,7 +48,7 @@ export default function LinksPage() {
           >
             <h3 className="font-semibold mb-1">Productivity Animal Test</h3>
             <p className="text-sm text-slate-400">
-              Discover if you're an Owl, Fox, Wolf, or Dolphin
+              Discover if you&apos;re an Owl, Fox, Wolf, or Dolphin
             </p>
           </Link>
           <Link
@@ -57,7 +57,7 @@ export default function LinksPage() {
           >
             <h3 className="font-semibold mb-1">Communication Style Quiz</h3>
             <p className="text-sm text-slate-400">
-              Find your communication strengths and blind spots
+               Find your communication strengths and blind spots
             </p>
           </Link>
           <Link
