@@ -1,3 +1,4 @@
+// src/app/opengraph-image.tsx
 import { ImageResponse } from "next/og";
 import { SITE } from "@/config/site";
 
@@ -18,22 +19,102 @@ export default async function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          background:
-            "linear-gradient(135deg, #0b1220 0%, #121826 40%, #0b1220 100%)",
+          background: "linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%)",
           color: "white",
-          fontSize: 56,
-          fontWeight: 800,
-          letterSpacing: "-0.02em",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        <div style={{ fontSize: 24, opacity: 0.85, marginBottom: 16 }}>
-          {SITE.name}
+        {/* Background Pattern */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            opacity: 0.1,
+            background: `
+              repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+              )
+            `,
+          }}
+        />
+
+        {/* Animal Emojis */}
+        <div
+          style={{
+            display: "flex",
+            gap: "32px",
+            fontSize: 72,
+            marginBottom: 32,
+          }}
+        >
+          <span>🦉</span>
+          <span>🦊</span>
+          <span>🐺</span>
+          <span>🐬</span>
         </div>
-        <div style={{ textAlign: "center", lineHeight: 1.1, padding: "0 40px" }}>
-          Discover your productivity animal
+
+        {/* Main Title */}
+        <div
+          style={{
+            fontSize: 72,
+            fontWeight: 900,
+            letterSpacing: "-0.03em",
+            marginBottom: 16,
+            textAlign: "center",
+            textShadow: "0 4px 8px rgba(0,0,0,0.2)",
+          }}
+        >
+          Find By Type
         </div>
-        <div style={{ fontSize: 24, opacity: 0.8, marginTop: 16 }}>
-          {SITE.url.replace(/^https?:\/\//, "")}
+
+        {/* Subtitle */}
+        <div
+          style={{
+            fontSize: 28,
+            opacity: 0.95,
+            textAlign: "center",
+            maxWidth: "80%",
+            lineHeight: 1.3,
+            marginBottom: 24,
+          }}
+        >
+          Discover Your Productivity Animal
+        </div>
+
+        {/* Tagline */}
+        <div
+          style={{
+            fontSize: 20,
+            opacity: 0.85,
+            textAlign: "center",
+            padding: "12px 24px",
+            background: "rgba(255,255,255,0.15)",
+            borderRadius: "24px",
+            backdropFilter: "blur(10px)",
+          }}
+        >
+          Personalized Desk Setups for Australian Remote Workers
+        </div>
+
+        {/* URL */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 30,
+            fontSize: 18,
+            opacity: 0.7,
+            letterSpacing: "0.05em",
+          }}
+        >
+          findbytype.com.au
         </div>
       </div>
     ),
@@ -41,4 +122,4 @@ export default async function OpengraphImage() {
   );
 }
 
-export const dynamic = "force-dynamic"; // always dynamic
+export const dynamic = "force-dynamic";
