@@ -74,29 +74,60 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </main>
 
-          {/* Footer */}
-          <footer className="backdrop-blur-md bg-white/60 dark:bg-slate-900/50 border-t border-black/5 dark:border-white/10">
-            <div className="max-w-3xl mx-auto px-4 py-6 text-xs text-slate-500 dark:text-slate-400 text-center space-y-2">
-              <div>
-                © {new Date().getFullYear()} {SITE.name} • As an Amazon Associate we earn
-                from qualifying purchases.
-              </div>
-              <div className="flex items-center justify-center gap-4">
-                <Link href="/disclosure" className="hover:underline underline-offset-4">
-                  Affiliate Disclosure
-                </Link>
-                <Link href="/q" className="hover:underline underline-offset-4">
-                  Quizzes
-                </Link>
-                <Link href="/shop" className="hover:underline underline-offset-4">
-                  Shop
-                </Link>
-                <Link href="/links" className="hover:underline underline-offset-4">
-                  Links
-                </Link>
-              </div>
-            </div>
-          </footer>
+
+{/* Footer */}
+<footer className="backdrop-blur-md bg-white/60 dark:bg-slate-900/50 border-t border-black/5 dark:border-white/10">
+  <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
+    {/* Main Footer Content */}
+    <div className="text-center space-y-3">
+      <div className="text-sm text-slate-500 dark:text-slate-400">
+        © {new Date().getFullYear()} {SITE.name} • 
+        <a href="mailto:support@findbytype.com.au" className="hover:text-indigo-400 ml-1">
+          support@findbytype.com.au
+        </a>
+      </div>
+      
+      {/* Legal Links */}
+      <div className="flex items-center justify-center gap-3 text-xs">
+        <Link href="/privacy" className="hover:text-indigo-400 hover:underline underline-offset-4">
+          Privacy
+        </Link>
+        <span className="text-slate-600 dark:text-slate-500">•</span>
+        <Link href="/terms" className="hover:text-indigo-400 hover:underline underline-offset-4">
+          Terms
+        </Link>
+        <span className="text-slate-600 dark:text-slate-500">•</span>
+        <Link href="/disclosure" className="hover:text-indigo-400 hover:underline underline-offset-4">
+          Disclosure
+        </Link>
+        <span className="text-slate-600 dark:text-slate-500">•</span>
+        <Link href="/dmca" className="hover:text-indigo-400 hover:underline underline-offset-4">
+          DMCA
+        </Link>
+      </div>
+      
+      {/* Navigation Links */}
+      <div className="flex items-center justify-center gap-3 text-xs">
+        <Link href="/q" className="hover:text-indigo-400 hover:underline underline-offset-4">
+          Quizzes
+        </Link>
+        <span className="text-slate-600 dark:text-slate-500">•</span>
+        <Link href="/shop" className="hover:text-indigo-400 hover:underline underline-offset-4">
+          Shop
+        </Link>
+        <span className="text-slate-600 dark:text-slate-500">•</span>
+        <Link href="/links" className="hover:text-indigo-400 hover:underline underline-offset-4">
+          Links
+        </Link>
+      </div>
+      
+      {/* Affiliate Disclosure Notice */}
+      <div className="text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-200 dark:border-slate-800">
+        As an Amazon Associate we earn from qualifying purchases
+      </div>
+    </div>
+  </div>
+</footer>
         </div>
 
         <Analytics />
