@@ -1,26 +1,23 @@
 // src/config/site.ts
-const isProd = process.env.NODE_ENV === "production";
 
-const vercelUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : undefined;
+const DEFAULT_URL = 'https://findbytype.com.au';
 
-const appUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  (isProd && vercelUrl) ||
-  "http://localhost:3000";
+// Prefer the public env var; fall back to your custom domain.
+// (No vercel.app / localhost fallbacks for production metadata/sitemaps.)
+const rawBase = (process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_URL).trim();
+const baseUrl = rawBase.replace(/\/+$/, ''); // ensure no trailing slash
 
 export const SITE = {
-  name: "Find By Type",
-  url: appUrl,
+  name: 'Find By Type',
+  url: baseUrl,
   description:
-    "Discover your productivity type and get personalized workspace recommendations for Australians",
-  twitter: "@findbytype",
-  locale: "en-AU",
-  currency: "AUD",
-};
+    'Discover your productivity type and get personalised workspace recommendations for Australians.',
+  twitter: '@findbytype',
+  locale: 'en-AU',
+  currency: 'AUD',
+} as const;
 
-// SEO defaults
+// SEO defaults (Next.js Metadata-compatible structure)
 export const SEO = {
   title: {
     default: SITE.name,
@@ -28,13 +25,12 @@ export const SEO = {
   },
   description: SITE.description,
   openGraph: {
-    type: "website",
+    type: 'website',
     locale: SITE.locale,
     url: SITE.url,
     siteName: SITE.name,
     images: [
       {
-        // Use Next's opengraph image route you already implemented
         url: `${SITE.url}/opengraph-image`,
         width: 1200,
         height: 630,
@@ -45,6 +41,6 @@ export const SEO = {
   twitter: {
     handle: SITE.twitter,
     site: SITE.twitter,
-    cardType: "summary_large_image",
+    cardType: 'summary_large_image',
   },
-};
+} as const;
