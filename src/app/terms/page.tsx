@@ -1,3 +1,4 @@
+// FILE: /app/terms/page.tsx - FIXED VERSION
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -47,7 +48,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold mt-6 mb-3">4. Product Recommendations & Affiliate Links</h2>
+          <h2 className="text-xl font-semibold mt-6 mb-3">4. Product Recommendations &amp; Affiliate Links</h2>
           <p>
             Our quizzes provide personalised product recommendations. These may include affiliate 
             links to third-party retailers (primarily Amazon Australia). We earn commissions 
@@ -59,7 +60,7 @@ export default function TermsPage() {
         <section>
           <h2 className="text-xl font-semibold mt-6 mb-3">5. Disclaimer of Warranties</h2>
           <p>
-            Our service is provided "as is" without any warranties, express or implied. We do not warrant that:
+            Our service is provided &quot;as is&quot; without any warranties, express or implied. We do not warrant that:
           </p>
           <ul className="list-disc pl-6 space-y-2">
             <li>The service will be uninterrupted or error-free</li>
@@ -90,7 +91,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold mt-6 mb-3">7. Refunds & Digital Products</h2>
+          <h2 className="text-xl font-semibold mt-6 mb-3">7. Refunds &amp; Digital Products</h2>
           <p>
             <strong>Digital Products:</strong> If we offer premium digital products (guides, courses, etc.), 
             we provide a 30-day money-back guarantee. To request a refund, email us at 
@@ -98,7 +99,7 @@ export default function TermsPage() {
           </p>
           <p className="mt-3">
             <strong>Physical Products:</strong> We do not sell physical products directly. 
-            Products purchased through affiliate links are subject to the respective retailer's 
+            Products purchased through affiliate links are subject to the respective retailer&apos;s 
             return policy.
           </p>
         </section>

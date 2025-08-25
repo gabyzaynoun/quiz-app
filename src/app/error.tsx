@@ -22,8 +22,8 @@ export default function Error({
           <h1 className="text-6xl font-bold text-red-500">500</h1>
           <h2 className="text-2xl font-semibold">Something went wrong!</h2>
           <p className="text-slate-400">
-            Don't worry, even the most productive systems need a break sometimes. 
-            Let's try again!
+           Don&apos;t worry, even the most productive systems need a break sometimes. 
+            Let&apos;s try again!
           </p>
         </div>
         

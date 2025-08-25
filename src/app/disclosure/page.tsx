@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -24,7 +25,7 @@ export default function DisclosurePage() {
           <p>
             When you click on certain links on our website and make a purchase, we may receive 
             a small commission at <strong>no additional cost to you</strong>. The price you pay 
-            remains exactly the same whether you use our affiliate link or go directly to the vendor's website.
+            remains exactly the same whether you use our affiliate link or go directly to the vendor&apos;s website.
           </p>
         </section>
 
@@ -32,7 +33,7 @@ export default function DisclosurePage() {
           <h2 className="text-xl font-semibold mt-6 mb-3">Our Commitment to Honest Recommendations</h2>
           <p>
             We are committed to providing honest, helpful recommendations based on your quiz results. 
-            Here's our promise to you:
+            Here&apos;s our promise to you:
           </p>
           <ul className="list-disc pl-6 space-y-2">
             <li>We only recommend products we genuinely believe will benefit you</li>
@@ -97,7 +98,7 @@ export default function DisclosurePage() {
           <h2 className="text-xl font-semibold mt-6 mb-3">Questions or Concerns?</h2>
           <p>
             If you have any questions about our affiliate relationships or feel a recommendation 
-            doesn't meet our standards, please let us know:
+            doesn&apos;t meet our standards, please let us know:
           </p>
           <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-lg mt-3">
             <p>Email: <a href="mailto:support@findbytype.com.au" className="text-indigo-500 hover:underline">support@findbytype.com.au</a></p>

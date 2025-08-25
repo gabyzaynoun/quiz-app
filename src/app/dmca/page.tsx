@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function DMCAPage() {
   return (
     <main className="container mx-auto px-4 py-8 max-w-3xl">
-      <h1 className="text-3xl font-bold mb-8">DMCA & Content Report</h1>
+      <h1 className="text-3xl font-bold mb-8">DMCA &amp; Content Report</h1>
       
       <div className="prose prose-slate dark:prose-invert max-w-none space-y-6">
         <section>
@@ -73,7 +73,7 @@ export default function DMCAPage() {
           </p>
           <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-lg mt-3">
             <p><strong>Email:</strong> <a href="mailto:support@findbytype.com.au" className="text-indigo-500 hover:underline">support@findbytype.com.au</a></p>
-            <p><strong>Subject Line:</strong> "DMCA Notice" or "Content Report"</p>
+            <p><strong>Subject Line:</strong> &quot;DMCA Notice&quot; or &quot;Content Report&quot;</p>
             <p className="mt-3">
               <strong>Mailing Address:</strong><br/>
               Find By Type<br/>
