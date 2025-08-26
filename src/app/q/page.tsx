@@ -14,21 +14,21 @@ export default function QuizHub() {
   console.log("Available quizzes:", quizzes);
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="w-full">
       {/* Header */}
       <div className="text-center mb-8 space-y-4">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
           Choose Your Quiz
         </h1>
-        <p className="text-slate-400 max-w-2xl mx-auto">
+        <p className="text-slate-400 max-w-3xl mx-auto">
           Take personality tests to discover your work style, optimize your setup, 
           and get personalized product recommendations for Australian shoppers.
         </p>
       </div>
 
-      {/* Quiz Grid */}
+      {/* Quiz Grid - Now using a wider layout */}
       {quizzes.length > 0 ? (
-        <div className="grid gap-6 md:grid-cols-2 mb-8">
+        <div className="grid gap-6 lg:grid-cols-2 mb-8">
           {/* Animal Quiz */}
           <Link 
             href="/q/animal"
@@ -117,7 +117,7 @@ export default function QuizHub() {
       )}
 
       {/* Info Box */}
-      <div className="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 rounded-xl p-6 border border-indigo-500/20">
+      <div className="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 rounded-xl p-6 border border-indigo-500/20 mb-8">
         <h3 className="text-lg font-semibold mb-3 text-indigo-300">
           💡 How Our Quizzes Work
         </h3>
@@ -147,7 +147,7 @@ export default function QuizHub() {
       </div>
 
       {/* Call to Action */}
-      <div className="text-center mt-8">
+      <div className="text-center">
         <p className="text-slate-400 mb-4">
           Not sure which quiz to take first?
         </p>

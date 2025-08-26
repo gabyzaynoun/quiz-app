@@ -1,182 +1,136 @@
+/* Tailwind (keep this exactly as-is for your setup) */
 @import "tailwindcss";
 
-/* ---------- CSS VARIABLES FOR THEMES ---------- */
+/* ---------- THEME TOKENS ---------- */
 :root {
-  --background: 255 255 255;
-  --foreground: 15 23 42;
-  --muted: 100 116 139;
-  --border: 226 232 240;
-  --primary: 99 102 241;
-  --ring: 99 102 241;
-  --card: 248 250 252;
-  --radius: 0.5rem;
+  --background: #f8fafc;              /* slate-50 */
+  --surface:    #ffffff;               /* card bg */
+  --foreground: #0f172a;               /* slate-900 */
+  --muted:      #64748b;               /* slate-500 */
+  --border:     #e5e7eb;               /* gray-200 */
+  --ring:       #93c5fd;               /* sky-300 */
+
+  /* Brand / accent */
+  --primary:            #4f46e5;       /* indigo-600 */
+  --primary-foreground: #ffffff;
+
+  /* Radii & shadow */
+  --radius: 16px;
+  --shadow-soft: 0 10px 30px rgba(2, 6, 23, 0.08);
+  --shadow-card: 0 8px 24px rgba(2, 6, 23, 0.06);
 }
 
-.dark {
-  --background: 15 23 42;
-  --foreground: 241 245 249;
-  --muted: 148 163 184;
-  --border: 51 65 85;
-  --primary: 129 140 248;
-  --ring: 129 140 248;
-  --card: 30 41 59;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0b1220;            /* deep slate */
+    --surface:    #0f172a;            /* slate-900 */
+    --foreground: #e5e7eb;            /* gray-200 */
+    --muted:      #a3a3a3;
+    --border:     #1f2937;            /* gray-800 */
+    --ring:       #60a5fa;            /* blue-400 */
+    --primary:    #818cf8;            /* indigo-400 */
+    --primary-foreground: #0b1220;
+    --shadow-soft: 0 10px 30px rgba(0,0,0,0.45);
+    --shadow-card: 0 8px 24px rgba(0,0,0,0.35);
+  }
 }
 
-/* ---------- BASE STYLES ---------- */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-  -webkit-tap-highlight-color: transparent;
-}
+/* ---------- BASE ---------- */
+html, body { height: 100%; }
+html { color-scheme: light dark; }
 
 body {
-  min-height: 100vh;
-  background: rgb(var(--background));
-  color: rgb(var(--foreground));
-  font-family: system-ui, -apple-system, sans-serif;
-  line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background:
+  radial-gradient(1200px 600px at 10% -10%, color-mix(in oklab, var(--primary) 4%, transparent), transparent 60%),
+  radial-gradient(800px 400px at 100% 0%, color-mix(in oklab, #10b981 4%, transparent), transparent 60%),
+  var(--background);
+  color: var(--foreground);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ---------- PAGE TRANSITIONS ---------- */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Improve text defaults a bit */
+p { line-height: 1.7; }
+h1,h2,h3 { letter-spacing: -0.02em; }
+
+/* Selection color */
+::selection {
+  background: color-mix(in oklab, var(--primary) 28%, #0000);
+  color: var(--primary-foreground);
 }
 
-@keyframes slideInFromRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+/* Links */
+a { color: color-mix(in oklab, var(--primary) 92%, #0000); text-underline-offset: 3px; }
+a:hover { text-decoration: underline; }
+
+/* ---------- LAYOUT HELPERS ---------- */
+.container {
+  max-width: 48rem; /* ~768px */
+  margin-inline: auto;
+  padding: 1.5rem;
 }
 
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Page entry animations */
-.page-enter {
-  animation: fadeInUp 0.5s ease-out;
-}
-
-.card-enter {
-  animation: scaleIn 0.3s ease-out;
-  animation-fill-mode: both;
-}
-
-.slide-enter {
-  animation: slideInFromRight 0.4s ease-out;
-  animation-fill-mode: both;
-}
-
-/* Stagger animations for lists */
-.stagger-container > * {
-  animation: fadeInUp 0.5s ease-out;
-  animation-fill-mode: both;
-}
-
-.stagger-container > *:nth-child(1) { animation-delay: 0.05s; }
-.stagger-container > *:nth-child(2) { animation-delay: 0.1s; }
-.stagger-container > *:nth-child(3) { animation-delay: 0.15s; }
-.stagger-container > *:nth-child(4) { animation-delay: 0.2s; }
-.stagger-container > *:nth-child(5) { animation-delay: 0.25s; }
-
-/* ---------- SMOOTH TRANSITIONS ---------- */
-a, button {
-  transition: all 0.2s ease;
-}
-
+/* ---------- CARDS (nice defaults for your quiz) ---------- */
 .card {
-  background: rgb(var(--card));
-  border: 1px solid rgb(var(--border));
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  transition: all 0.3s ease;
+  box-shadow: var(--shadow-card);
 }
 
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+.card-body { padding: 1.25rem; }
+
+/* ---------- BUTTON BASE (optional: your React Button already applies classes) ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.75rem 1rem; border-radius: 12px;
+  font-weight: 600; font-size: 0.95rem; transition: all .15s ease;
+  border: 1px solid transparent;
+}
+.btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+/* Variants */
+.btn-primary { background: var(--primary); color: var(--primary-foreground); }
+.btn-primary:hover { filter: brightness(0.95); }
+.btn-outline  { background: var(--surface); color: var(--foreground); border-color: var(--border); }
+.btn-outline:hover { background: color-mix(in oklab, var(--surface) 85%, var(--primary) 15%); }
+
+/* ---------- ANSWER CHOICES (pretty list buttons) ---------- */
+.choice {
+  display: block; width: 100%; text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.9rem 1rem; border-radius: 12px;
+  transition: transform .06s ease, background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.choice:hover { background: color-mix(in oklab, var(--surface) 92%, var(--primary) 8%); border-color: color-mix(in oklab, var(--border) 70%, var(--primary) 30%); }
+.choice:active { transform: translateY(1px); }
+.choice:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+/* ---------- PROGRESS BAR (used by your component) ---------- */
+.progress {
+  height: 8px; width: 100%; background: #e5e7eb; border-radius: 9999px; overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(2,6,23,.06);
+}
+.progress__bar {
+  height: 100%; background: var(--primary);
+  transition: width .25s ease; border-radius: inherit;
 }
 
-/* ---------- MOBILE OPTIMIZATIONS ---------- */
-@media (max-width: 768px) {
-  /* Keep animations but make them faster on mobile */
-  .page-enter {
-    animation-duration: 0.3s;
-  }
-  
-  .card-enter {
-    animation-duration: 0.2s;
-  }
-  
-  /* Touch-friendly transitions */
-  .card:active {
-    transform: scale(0.98);
-  }
-  
-  button:active {
-    transform: scale(0.95);
-  }
+/* ---------- SCROLLBAR (WebKit browsers) ---------- */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--primary) 35%, #b6b6b6);
+  border-radius: 9999px; border: 2px solid transparent; background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--primary) 50%, #a3a3a3);
 }
 
-/* ---------- SCROLLBAR STYLING ---------- */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgb(var(--background));
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgb(var(--muted));
-  border-radius: 5px;
-  transition: background 0.3s;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgb(var(--primary));
-}
-
-/* ---------- UTILITIES ---------- */
-.transition-colors {
-  transition: color 0.3s, background-color 0.3s, border-color 0.3s;
-}
-
-.transition-transform {
-  transition: transform 0.3s ease;
-}
-
-.transition-all {
-  transition: all 0.3s ease;
-}
-
-/* ---------- FOCUS STYLES ---------- */
-:focus-visible {
-  outline: 2px solid rgb(var(--ring));
+/* ---------- FOCUS RING (global safety net) ---------- */
+:where(button, a, input, select, textarea):focus-visible {
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
