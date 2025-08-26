@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Analytics } from "@vercel/analytics/react";
 import { SITE, SEO, SEO_KEYWORDS } from "@/config/site";
 import { StructuredData } from "@/components/ui/structured-data";
+import { ServiceWorkerRegistration } from "@/components/ui/ServiceWorkerRegistration";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
     title: SEO.openGraph.title,
     description: SEO.openGraph.description,
     locale: SEO.openGraph.locale,
-    images: [...SEO.openGraph.images], // Spread to create mutable array
+    images: [...SEO.openGraph.images],
   },
   twitter: {
     card: "summary_large_image",
@@ -67,7 +68,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <StructuredData />
       </head>
-      <body className="min-h-dvh bg-gradient-to-b from-slate-950 to-slate-900 text-slate-100 antialiased">
+      <body className="bg-slate-900 text-slate-100">
+        <ServiceWorkerRegistration />
         {/* a11y: skip link */}
         <a
           href="#main"
@@ -143,7 +145,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </footer>
         </div>
-
+        {children}
         <Analytics />
       </body>
     </html>
