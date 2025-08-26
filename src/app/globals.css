@@ -1,145 +1,218 @@
-/* src/app/globals.css */
-/* Tailwind (keep this exactly as-is for your setup) */
+/* src/app/globals.css - Updated for better mobile contrast */
 @import "tailwindcss";
 
 /* ---------- THEME TOKENS ---------- */
 :root {
-  --background: #f8fafc;              /* slate-50 */
-  --surface:    #ffffff;               /* card bg */
-  --foreground: #0f172a;               /* slate-900 */
-  --muted:      #64748b;               /* slate-500 */
-  --border:     #e5e7eb;               /* gray-200 */
-  --ring:       #93c5fd;               /* sky-300 */
-
-  /* Brand / accent */
-  --primary:            #4f46e5;       /* indigo-600 */
+  --background: #ffffff;
+  --surface: #f8f9fa;
+  --foreground: #1a1a1a;  /* Darker for better contrast */
+  --muted: #6b7280;
+  --border: #d1d5db;
+  --ring: #6366f1;
+  
+  /* Brand colors with better contrast */
+  --primary: #5b21b6;  /* Darker purple for light mode */
   --primary-foreground: #ffffff;
-
-  /* Radii & shadow */
-  --radius: 16px;
-  --shadow-soft: 0 10px 30px rgba(2, 6, 23, 0.08);
-  --shadow-card: 0 8px 24px rgba(2, 6, 23, 0.06);
+  
+  /* Enhanced shadows for light mode */
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --radius: 12px;
 }
 
+/* Dark mode - keep your existing good contrast */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0b1220;            /* deep slate */
-    --surface:    #0f172a;            /* slate-900 */
-    --foreground: #e5e7eb;            /* gray-200 */
-    --muted:      #a3a3a3;
-    --border:     #1f2937;            /* gray-800 */
-    --ring:       #60a5fa;            /* blue-400 */
-    --primary:    #818cf8;            /* indigo-400 */
+    --background: #0b1220;
+    --surface: #0f172a;
+    --foreground: #e5e7eb;
+    --muted: #9ca3af;
+    --border: #374151;
+    --ring: #818cf8;
+    --primary: #818cf8;
     --primary-foreground: #0b1220;
-    --shadow-soft: 0 10px 30px rgba(0,0,0,0.45);
-    --shadow-card: 0 8px 24px rgba(0,0,0,0.35);
+    --shadow-soft: 0 10px 30px rgba(0,0,0,0.5);
+    --shadow-card: 0 8px 24px rgba(0,0,0,0.4);
+  }
+}
+
+/* Force dark mode on mobile if needed */
+@media (max-width: 768px) {
+  :root {
+    /* Force dark theme on mobile for better visibility */
+    --background: #0f172a !important;
+    --surface: #1e293b !important;
+    --foreground: #f1f5f9 !important;
+    --muted: #94a3b8 !important;
+    --border: #334155 !important;
+    --primary: #818cf8 !important;
+    --primary-foreground: #0f172a !important;
+  }
+  
+  body {
+    background: var(--background) !important;
+    color: var(--foreground) !important;
   }
 }
 
 /* ---------- BASE ---------- */
-/* REMOVED: html, body { height: 100%; } - This was conflicting with min-h-dvh */
 html { 
   color-scheme: light dark;
-  /* Prevent horizontal scroll */
-  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  /* Let Tailwind's min-h-dvh handle the height */
   margin: 0;
-  background:
-    radial-gradient(1200px 600px at 10% -10%, color-mix(in oklab, var(--primary) 4%, transparent), transparent 60%),
-    radial-gradient(800px 400px at 100% 0%, color-mix(in oklab, #10b981 4%, transparent), transparent 60%),
-    var(--background);
+  min-height: 100vh;
+  background: var(--background);
   color: var(--foreground);
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Ensure body takes full width */
-  width: 100%;
+  line-height: 1.6;
 }
 
-/* Improve text defaults a bit */
-p { line-height: 1.7; }
-h1,h2,h3 { letter-spacing: -0.02em; }
-
-/* Selection color */
-::selection {
-  background: color-mix(in oklab, var(--primary) 28%, #0000);
-  color: var(--primary-foreground);
+/* ---------- MOBILE SPECIFIC FIXES ---------- */
+@media (max-width: 768px) {
+  /* Better button visibility on mobile */
+  .btn, 
+  button,
+  a[href] {
+    min-height: 48px; /* Better touch targets */
+    font-weight: 600;
+    border: 1px solid var(--border);
+  }
+  
+  /* Ensure gradient text is visible */
+  .gradient-text,
+  [class*="bg-gradient"] {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800; /* Bolder for better visibility */
+    filter: brightness(1.2);
+  }
+  
+  /* Better card contrast on mobile */
+  .card,
+  [class*="bg-slate-800"],
+  [class*="bg-slate-700"] {
+    background: var(--surface) !important;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+  }
+  
+  /* Navigation bar fix */
+  header,
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  /* Fix quiz buttons visibility */
+  .quiz-card,
+  [href^="/q/"] {
+    background: var(--surface);
+    border: 2px solid var(--primary);
+    color: var(--foreground);
+    padding: 1rem;
+    border-radius: var(--radius);
+    display: block;
+    transition: all 0.2s;
+  }
+  
+  .quiz-card:active,
+  [href^="/q/"]:active {
+    transform: scale(0.98);
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+  
+  /* Improve text readability */
+  p, span, div {
+    font-size: max(16px, 1rem); /* Prevent zoom on iOS */
+    line-height: 1.6;
+  }
+  
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.25rem; }
 }
 
-/* Links */
-a { color: color-mix(in oklab, var(--primary) 92%, #0000); text-underline-offset: 3px; }
-a:hover { text-decoration: underline; }
-
-/* ---------- LAYOUT HELPERS ---------- */
+/* ---------- UTILITY CLASSES ---------- */
 .container {
-  max-width: 48rem; /* ~768px */
+  max-width: 48rem;
   margin-inline: auto;
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
-/* ---------- CARDS (nice defaults for your quiz) ---------- */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-card);
-}
-
-.card-body { padding: 1.25rem; }
-
-/* ---------- BUTTON BASE (optional: your React Button already applies classes) ---------- */
+/* Enhanced button styles */
 .btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  padding: 0.75rem 1rem; border-radius: 12px;
-  font-weight: 600; font-size: 0.95rem; transition: all .15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  text-decoration: none;
   border: 1px solid transparent;
 }
-.btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 
-/* Variants */
-.btn-primary { background: var(--primary); color: var(--primary-foreground); }
-.btn-primary:hover { filter: brightness(0.95); }
-.btn-outline  { background: var(--surface); color: var(--foreground); border-color: var(--border); }
-.btn-outline:hover { background: color-mix(in oklab, var(--surface) 85%, var(--primary) 15%); }
+.btn-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
 
-/* ---------- ANSWER CHOICES (pretty list buttons) ---------- */
-.choice {
-  display: block; width: 100%; text-align: left;
+.btn-primary:hover {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--foreground);
+  border-color: var(--border);
+}
+
+.btn-outline:hover {
   background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 0.9rem 1rem; border-radius: 12px;
-  transition: transform .06s ease, background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
-}
-.choice:hover { background: color-mix(in oklab, var(--surface) 92%, var(--primary) 8%); border-color: color-mix(in oklab, var(--border) 70%, var(--primary) 30%); }
-.choice:active { transform: translateY(1px); }
-.choice:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-
-/* ---------- PROGRESS BAR (used by your component) ---------- */
-.progress {
-  height: 8px; width: 100%; background: #e5e7eb; border-radius: 9999px; overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(2,6,23,.06);
-}
-.progress__bar {
-  height: 100%; background: var(--primary);
-  transition: width .25s ease; border-radius: inherit;
+  border-color: var(--primary);
 }
 
-/* ---------- SCROLLBAR (WebKit browsers) ---------- */
-*::-webkit-scrollbar { width: 10px; height: 10px; }
-*::-webkit-scrollbar-track { background: transparent; }
+/* ---------- SCROLLBAR ---------- */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
 *::-webkit-scrollbar-thumb {
-  background: color-mix(in oklab, var(--primary) 35%, #b6b6b6);
-  border-radius: 9999px; border: 2px solid transparent; background-clip: padding-box;
-}
-*::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in oklab, var(--primary) 50%, #a3a3a3);
+  background: var(--muted);
+  border-radius: 5px;
 }
 
-/* ---------- FOCUS RING (global safety net) ---------- */
-:where(button, a, input, select, textarea):focus-visible {
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* ---------- FOCUS STATES ---------- */
+:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+
+/* ---------- SELECTION ---------- */
+::selection {
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
