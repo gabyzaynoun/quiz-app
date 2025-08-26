@@ -141,12 +141,12 @@ export const animalQuiz: Quiz = {
         "Schedule regular breaks to recharge"
       ],
       products: [
-        {
-          id: "sony-xm5",
-          title: "Sony WH-1000XM5 Headphones",
-          href: "https://www.amazon.com.au/dp/B09XS7JWHH",
-          subtitle: "Premium noise cancellation"
-        },
+  {
+    id: "sony-xm5",
+    title: "Sony WH-1000XM5 Headphones",
+    href: "https://www.amazon.com.au/s?k=Sony+WH-1000XM5+noise+cancelling+headphones",
+    subtitle: "Premium noise cancellation"
+  },
         {
           id: "standing-desk",
           title: "Flexispot Standing Desk",

@@ -260,7 +260,7 @@ export const QUIZ = {
         "Automate one manual step per week.",
       ],
       products: [
-        { id: "time-timer-mod", title: "Time Timer MOD", href: "https://www.amazon.com.au/dp/B01COEZM1M", subtitle: "Visual deadlines" },
+        { id: "time-timer-mod", title: "Time Timer MOD", href: "https://www.amazon.com.au/s?k=time+timer+visual+countdown", subtitle: "Visual deadlines" },
         { id: "glass-desk-whiteboard", title: "Glass Desktop Whiteboard", href: "https://www.amazon.com.au/Glass-Desktop-Computer-Accessories-Calendar/dp/B0BVYTKSLD", subtitle: "Plan at a glance" },
       ],
     },

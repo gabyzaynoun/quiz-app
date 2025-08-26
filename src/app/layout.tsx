@@ -88,7 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </Link>
 
               <nav className="flex items-center gap-6 text-sm text-slate-600 dark:text-slate-300">
-                <Link href="/quiz" className="hover:text-slate-900 dark:hover:text-white">
+                <Link href="/q" className="hover:text-slate-900 dark:hover:text-white">
                   Quizzes
                 </Link>
                 <Link href="/shop" className="hover:text-slate-900 dark:hover:text-white">
