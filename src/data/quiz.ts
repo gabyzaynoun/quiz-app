@@ -207,7 +207,7 @@ export const QUIZ = {
         "End each session with a 3-bullet handoff note to ‘future you’.",
       ],
       products: [
-        { id: "sony-xm5", title: "Sony WH-1000XM5 ANC Headphones", href: "https://www.amazon.com.au/dp/B09XS7JWHH", subtitle: "Silence for deep work" },
+        { id: "sony-xm5", title: "Sony WH-1000XM5 ANC Headphones", href: "https://www.amazon.com.au/s?k=Sony+WH-1000XM5+noise+cancelling+headphones", subtitle: "Silence for deep work" },
         { id: "leuchtturm-a5-dotted", title: "Leuchtturm1917 A5 Dotted", href: "https://www.amazon.com.au/Leuchtturm1917-Medium-Size-Hardcover-Notebook/dp/B07L16V71N", subtitle: "Paper for thinking" },
         { id: "noise-machine", title: "White/Brown Noise Machine", href: "https://www.amazon.com.au/s?k=white+noise+machine", subtitle: "Stay in the zone" },
       ],
