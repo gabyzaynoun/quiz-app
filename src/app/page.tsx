@@ -125,7 +125,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works - Properly centered */}
+      {/* How It Works */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-purple-900/10 to-pink-900/10 dark:from-purple-900/20 dark:to-pink-900/20">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
@@ -161,7 +161,7 @@ export default function Home() {
               <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-3xl font-bold text-white shadow-xl">
                 3
               </div>
-              <h3 className="font-bold text-xl mb-3">Get Results & Shop</h3>
+              <h3 className="font-bold text-xl mb-3">Get Results &amp; Shop</h3>
               <p className="text-slate-600 dark:text-slate-400">
                 See your type, get tips, and browse curated Amazon products for your style
               </p>
@@ -183,7 +183,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Grid - Better centered */}
+      {/* Features Grid */}
       <section className="py-16 md:py-20 bg-white dark:bg-slate-900">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
@@ -219,7 +219,7 @@ export default function Home() {
               <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
                 <span className="text-2xl">⚡</span>
               </div>
-              <h3 className="font-bold text-lg mb-3">Quick & Easy</h3>
+              <h3 className="font-bold text-lg mb-3">Quick &amp; Easy</h3>
               <p className="text-slate-600 dark:text-slate-400">
                 Each quiz takes just 2-3 minutes with instant results
               </p>
@@ -232,7 +232,7 @@ export default function Home() {
               </div>
               <h3 className="font-bold text-lg mb-3">Privacy First</h3>
               <p className="text-slate-600 dark:text-slate-400">
-                No signup required, answers aren't stored anywhere
+                No signup required, answers aren&apos;t stored anywhere
               </p>
             </div>
 
@@ -268,7 +268,7 @@ export default function Home() {
             Ready to Discover Your Type?
           </h2>
           <p className="text-xl mb-8 text-white/90">
-            Join thousands of Australians who've optimized their workspace and productivity
+            Join thousands of Australians who&apos;ve optimized their workspace and productivity
           </p>
           <Link 
             href="/q/animal"
