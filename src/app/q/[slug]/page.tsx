@@ -98,7 +98,7 @@ export default async function QuizIntro(
 
         {/* What You'll Discover */}
         <div className="mb-8">
-          <h2 className="font-semibold mb-3 text-slate-200">What You'll Discover:</h2>
+          <h2 className="font-semibold mb-3 text-slate-200">What You&apos;ll Discover:</h2>
           <ul className="space-y-2">
             <li className="flex items-start gap-2">
               <span className="text-indigo-400 mt-1">✓</span>

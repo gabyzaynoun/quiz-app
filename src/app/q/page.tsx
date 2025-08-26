@@ -39,7 +39,7 @@ export default function QuizHub() {
               Productivity Animal Test
             </h2>
             <p className="text-slate-400 text-sm mb-4">
-              Discover if you're an Owl, Fox, Wolf, or Dolphin. Get personalized desk setup recommendations.
+              Discover if you&apos;re an Owl, Fox, Wolf, or Dolphin. Get personalized desk setup recommendations.
             </p>
             <div className="flex items-center justify-between">
               <span className="text-xs text-slate-500">12 questions • 3 minutes</span>
