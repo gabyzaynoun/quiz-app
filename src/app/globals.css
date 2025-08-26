@@ -1,3 +1,4 @@
+/* src/app/globals.css */
 /* Tailwind (keep this exactly as-is for your setup) */
 @import "tailwindcss";
 
@@ -36,18 +37,26 @@
 }
 
 /* ---------- BASE ---------- */
-html, body { height: 100%; }
-html { color-scheme: light dark; }
+/* REMOVED: html, body { height: 100%; } - This was conflicting with min-h-dvh */
+html { 
+  color-scheme: light dark;
+  /* Prevent horizontal scroll */
+  overflow-x: hidden;
+}
 
 body {
+  /* Let Tailwind's min-h-dvh handle the height */
+  margin: 0;
   background:
-  radial-gradient(1200px 600px at 10% -10%, color-mix(in oklab, var(--primary) 4%, transparent), transparent 60%),
-  radial-gradient(800px 400px at 100% 0%, color-mix(in oklab, #10b981 4%, transparent), transparent 60%),
-  var(--background);
+    radial-gradient(1200px 600px at 10% -10%, color-mix(in oklab, var(--primary) 4%, transparent), transparent 60%),
+    radial-gradient(800px 400px at 100% 0%, color-mix(in oklab, #10b981 4%, transparent), transparent 60%),
+    var(--background);
   color: var(--foreground);
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Ensure body takes full width */
+  width: 100%;
 }
 
 /* Improve text defaults a bit */

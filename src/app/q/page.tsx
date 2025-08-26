@@ -1,57 +1,71 @@
+// src/app/page.tsx
 import Link from "next/link";
-import { listQuizzes } from "@/data/quizzes";
 
-export const metadata = { 
-  title: "All Quizzes - Choose Your Test",
-  description: "Pick from personality, communication, desk setup, or sleep optimization quizzes."
-};
-
-export default function QuizHub() {
-  const quizzes = listQuizzes();
-
+export default function Home() {
   return (
-    <main className="max-w-3xl mx-auto space-y-6">
-      <div className="card">
-        <div className="card-body">
-          <h1 className="text-3xl font-bold">Choose Your Quiz</h1>
-          <p className="text-slate-400 mt-2">
-            Take personality tests to discover your work style, optimize your setup, and get personalized product recommendations.
-          </p>
-        </div>
-      </div>
+    <>
+      {/* Hero Section */}
+      <section className="flex flex-col justify-center py-16 md:py-24">
+        <div className="text-center space-y-6">
+          <span className="inline-flex items-center gap-2 text-xs font-medium rounded-full border px-3 py-1 bg-white/60 dark:bg-white/10 backdrop-blur">
+            ✨ New • 4 Personality Tests Available
+          </span>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        {quizzes.map((quiz) => (
-          <div key={quiz.slug} className="card hover:shadow-lg transition-shadow">
-            <div className="card-body">
-              <div className="text-2xl mb-2">
-                {quiz.slug === "animal" && "🐾"}
-                {quiz.slug === "comm" && "💬"}
-                {quiz.slug === "desk" && "🖥️"}
-                {quiz.slug === "sleep" && "😴"}
-              </div>
-              <h2 className="text-xl font-semibold">{quiz.title}</h2>
-              <p className="text-slate-400 mt-1 text-sm">{quiz.description}</p>
-              <Link
-                href={`/q/${quiz.slug}`}
-                className="btn btn-primary mt-4 inline-block"
-              >
-                Start Quiz →
-              </Link>
-            </div>
+          <h1 className="text-5xl md:text-6xl font-extrabold leading-tight tracking-tight">
+            <span className="bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-400 bg-clip-text text-transparent">
+              Discover Your Productivity Style
+            </span>
+          </h1>
+
+          <p className="max-w-2xl mx-auto text-slate-600 dark:text-slate-300">
+            Take quick personality tests to discover your work style, communication patterns, 
+            ideal desk setup, and sleep optimization. Get personalized product recommendations.
+          </p>
+
+          <div className="flex items-center justify-center gap-3">
+            <Link href="/q" className="btn btn-primary">Browse All Quizzes</Link>
+            <a href="#how" className="btn btn-outline">How it works</a>
           </div>
-        ))}
-      </div>
 
-      <div className="card bg-indigo-900/20">
-        <div className="card-body text-center">
-          <h3 className="text-lg font-semibold">💡 How Our Quizzes Work</h3>
-          <p className="text-sm text-slate-400 mt-2">
-            Each quiz takes 2-3 minutes. Answer honestly for best results. 
-            Get instant analysis with personalized Amazon product recommendations.
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Free • 2–3 minutes per quiz • Instant results
           </p>
         </div>
-      </div>
-    </main>
+      </section>
+
+      {/* How it works section */}
+      <section id="how" className="py-16 md:py-24">
+        <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="text-center">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-2xl">
+              1️⃣
+            </div>
+            <h3 className="font-semibold mb-2">Pick a Quiz</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              Choose from personality, communication, desk setup, or sleep optimization tests
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-2xl">
+              2️⃣
+            </div>
+            <h3 className="font-semibold mb-2">Answer Questions</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              Quick multiple-choice questions that take 2-3 minutes to complete
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-2xl">
+              3️⃣
+            </div>
+            <h3 className="font-semibold mb-2">Get Results & Shop</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              See your type, get tips, and browse curated Amazon products for your style
+            </p>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

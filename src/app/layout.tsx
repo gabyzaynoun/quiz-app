@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Analytics } from "@vercel/analytics/react";
 import { SITE, SEO, SEO_KEYWORDS } from "@/config/site";
 import { StructuredData } from "@/components/ui/structured-data";
-import { ServiceWorkerRegistration } from "@/components/ui/ServiceWorkerRegistration";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -68,8 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <StructuredData />
       </head>
-      <body className="bg-slate-900 text-slate-100">
-        <ServiceWorkerRegistration />
+      <body className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-slate-100 antialiased">
         {/* a11y: skip link */}
         <a
           href="#main"
@@ -78,7 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
 
-        <div className="min-h-dvh flex flex-col">
+        <div className="min-h-screen flex flex-col">
           {/* Header */}
           <header className="sticky top-0 z-50 backdrop-blur-md bg-white/70 dark:bg-slate-900/60 border-b border-black/5 dark:border-white/10">
             <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -106,8 +104,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </header>
 
-          {/* Main */}
-          <main id="main" className="flex-1 max-w-3xl mx-auto px-4 py-8">
+          {/* Main - flex-1 will make it grow to fill available space */}
+          <main id="main" className="flex-1 w-full max-w-3xl mx-auto px-4 py-8">
             {children}
           </main>
 
@@ -145,7 +143,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </footer>
         </div>
-        {children}
+
         <Analytics />
       </body>
     </html>
