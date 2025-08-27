@@ -15,7 +15,7 @@ export function ThemeToggle() {
   if (!mounted) {
     // Return a placeholder with the same dimensions to prevent layout shift
     return (
-      <button className="w-10 h-10 rounded-lg bg-slate-200 dark:bg-slate-800 animate-pulse" aria-label="Loading theme toggle" />
+      <button className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-slate-200 dark:bg-slate-800 animate-pulse" aria-label="Loading theme toggle" />
     );
   }
 
@@ -32,13 +32,13 @@ export function ThemeToggle() {
   return (
     <button
       onClick={handleThemeChange}
-      className="group relative flex items-center justify-center w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-200 touch-manipulation"
+      className="group relative flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-200 touch-manipulation"
       aria-label={`Current theme: ${theme}. Click to change theme`}
     >
-      <div className="relative w-5 h-5">
+      <div className="relative w-4 h-4 sm:w-5 sm:h-5">
         {/* Sun icon for light mode */}
         <svg
-          className={`absolute inset-0 w-5 h-5 transition-all duration-300 ${
+          className={`absolute inset-0 w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 ${
             resolvedTheme === 'light' 
               ? 'rotate-0 scale-100 opacity-100' 
               : 'rotate-90 scale-0 opacity-0'
@@ -57,7 +57,7 @@ export function ThemeToggle() {
         
         {/* Moon icon for dark mode */}
         <svg
-          className={`absolute inset-0 w-5 h-5 transition-all duration-300 ${
+          className={`absolute inset-0 w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 ${
             resolvedTheme === 'dark' 
               ? 'rotate-0 scale-100 opacity-100' 
               : '-rotate-90 scale-0 opacity-0'
@@ -77,7 +77,7 @@ export function ThemeToggle() {
         {/* System icon when in system mode - visible on larger screens */}
         {theme === 'system' && (
           <svg
-            className="absolute inset-0 w-5 h-5 transition-all duration-300 rotate-0 scale-100 opacity-100 hidden sm:block"
+            className="absolute inset-0 w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 rotate-0 scale-100 opacity-100 hidden sm:block"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

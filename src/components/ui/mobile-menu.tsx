@@ -38,26 +38,23 @@ export function MobileMenu() {
   }, [isOpen]);
 
   const menuItems = [
-    { href: '/q', label: 'Quizzes', icon: '📝' },
-    { href: '/shop', label: 'Shop', icon: '🛍️' },
-    { href: '/links', label: 'Links', icon: '🔗' },
     { href: '/disclosure', label: 'About', icon: 'ℹ️' },
   ];
 
   return (
     <>
-      {/* Hamburger Button - Always visible on mobile */}
+      {/* Hamburger Button - Smaller, for additional options */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative flex flex-col items-center justify-center w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300 touch-manipulation"
-        aria-label="Toggle menu"
+        className="relative flex flex-col items-center justify-center w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300 touch-manipulation"
+        aria-label="More options"
         aria-expanded={isOpen}
       >
-        <span className="sr-only">Toggle navigation menu</span>
-        <div className="w-5 h-4 flex flex-col justify-between">
+        <span className="sr-only">More options menu</span>
+        <div className="w-4 h-3.5 flex flex-col justify-between">
           <span
             className={`block h-0.5 w-full bg-slate-700 dark:bg-slate-300 rounded-full transition-all duration-300 ${
-              isOpen ? 'rotate-45 translate-y-1.5' : ''
+              isOpen ? 'rotate-45 translate-y-[5px]' : ''
             }`}
           />
           <span
@@ -67,7 +64,7 @@ export function MobileMenu() {
           />
           <span
             className={`block h-0.5 w-full bg-slate-700 dark:bg-slate-300 rounded-full transition-all duration-300 ${
-              isOpen ? '-rotate-45 -translate-y-1.5' : ''
+              isOpen ? '-rotate-45 -translate-y-[5px]' : ''
             }`}
           />
         </div>
@@ -90,7 +87,7 @@ export function MobileMenu() {
         <div className="flex flex-col h-full">
           {/* Menu Header */}
           <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800">
-            <h2 className="text-lg font-bold">Navigation</h2>
+            <h2 className="text-lg font-bold">More</h2>
             <button
               onClick={() => setIsOpen(false)}
               className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -104,7 +101,8 @@ export function MobileMenu() {
 
           {/* Menu Items */}
           <nav className="flex-1 overflow-y-auto p-4">
-            <ul className="space-y-1">
+            {/* Main Item - About */}
+            <ul className="space-y-1 mb-6">
               {menuItems.map((item) => (
                 <li key={item.href}>
                   <Link
@@ -123,8 +121,8 @@ export function MobileMenu() {
               ))}
             </ul>
 
-            {/* Additional Links */}
-            <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
+            {/* Popular Quizzes */}
+            <div className="pt-6 border-t border-slate-200 dark:border-slate-800">
               <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3 px-4 uppercase tracking-wider">
                 Popular Quizzes
               </h3>

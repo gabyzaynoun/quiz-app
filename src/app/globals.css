@@ -58,6 +58,7 @@ html {
   scroll-behavior: smooth;
   /* Prevent horizontal scroll on mobile */
   overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
@@ -67,8 +68,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
   /* Prevent horizontal scroll */
   overflow-x: hidden;
+  max-width: 100%;
   /* Ensure minimum font size for readability */
   font-size: 16px;
+}
+
+/* Prevent any element from causing horizontal scroll */
+* {
+  max-width: 100vw;
 }
 
 /* ---------- MOBILE-FIRST RESPONSIVE TYPOGRAPHY ---------- */
@@ -414,6 +421,9 @@ body.menu-open {
     /* Prevent bounce scrolling */
     position: relative;
     overflow-x: hidden;
+    /* Prevent swipe navigation on iOS Safari */
+    -webkit-user-select: none;
+    user-select: none;
   }
   
   body {
@@ -421,6 +431,15 @@ body.menu-open {
     width: 100%;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+    /* Prevent edge swipe gestures */
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  /* Allow text selection in main content */
+  main {
+    -webkit-user-select: text;
+    user-select: text;
   }
   
   /* Fix for iOS input zoom */
@@ -485,11 +504,22 @@ img, video {
 html {
   /* Prevent pull-to-refresh on mobile */
   overscroll-behavior-y: contain;
+  /* Prevent swipe navigation */
+  overscroll-behavior-x: none;
 }
 
 body {
-  /* Prevent horizontal swipe navigation but allow menu */
-  overscroll-behavior-x: contain;
+  /* Prevent horizontal swipe navigation */
+  overscroll-behavior-x: none;
+  /* Disable swipe gestures for back/forward navigation */
+  touch-action: pan-y pinch-zoom;
+}
+
+/* Prevent swipe navigation on main content */
+main {
+  /* Prevent swipe gestures */
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior-x: none;
 }
 
 /* Prevent iOS rubber band scrolling */
