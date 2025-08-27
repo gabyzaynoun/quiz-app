@@ -1,27 +1,38 @@
+// src/components/ui/page-transition.tsx
 'use client';
 
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState, ReactNode } from 'react';
 
-export function PageTransition({ children }: { children: ReactNode }) {
+export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [displayChildren, setDisplayChildren] = useState(children);
+  const [transitionStage, setTransitionStage] = useState('fadeIn');
 
   useEffect(() => {
-    setIsTransitioning(true);
-    const timer = setTimeout(() => setIsTransitioning(false), 300);
-    return () => clearTimeout(timer);
-  }, [pathname]);
+    if (children !== displayChildren) {
+      setTransitionStage('fadeOut');
+    }
+  }, [children, displayChildren]);
+
+  useEffect(() => {
+    if (transitionStage === 'fadeOut') {
+      const timer = setTimeout(() => {
+        setDisplayChildren(children);
+        setTransitionStage('fadeIn');
+      }, 200); // Duration of fade out
+
+      return () => clearTimeout(timer);
+    }
+  }, [transitionStage, children]);
 
   return (
     <div
-      className={`transition-all duration-300 ease-out ${
-        isTransitioning
-          ? 'opacity-0 translate-y-2 scale-[0.99]'
-          : 'opacity-100 translate-y-0 scale-100'
+      className={`transition-opacity duration-200 ${
+        transitionStage === 'fadeIn' ? 'opacity-100' : 'opacity-0'
       }`}
     >
-      {children}
+      {displayChildren}
     </div>
   );
 }

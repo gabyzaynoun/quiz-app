@@ -1,14 +1,17 @@
-import { Suspense } from "react";
-import ShopClient from "../shop/shopClient";
+// src/app/shop/page.tsx
+import { Metadata } from "next";
+import { ShopClient } from "./shopClient";
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "Shop Productivity Tools | Find By Type",
+  description: "Curated productivity tools and workspace essentials for Australian remote workers. Hand-picked items based on your personality type.",
+  openGraph: {
+    title: "Shop Productivity Tools | Find By Type",
+    description: "Curated productivity tools and workspace essentials for Australian remote workers",
+  },
+};
 
-export const metadata = { title: "Shop" };
-
-export default function Page() {
-  return (
-    <Suspense fallback={<main className="container py-16">Loading shop…</main>}>
-      <ShopClient />
-    </Suspense>
-  );
+export default function ShopPage() {
+  return <ShopClient />;
 }
+
