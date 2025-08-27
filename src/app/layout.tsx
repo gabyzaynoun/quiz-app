@@ -45,19 +45,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <StructuredData />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                const theme = localStorage.getItem('theme') || 'system';
-                const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                const resolved = theme === 'system' ? systemTheme : theme;
-                document.documentElement.classList.add(resolved);
-                document.documentElement.setAttribute('data-theme', theme);
-              })();
-            `,
-          }}
-        />
+      
+<script
+  dangerouslySetInnerHTML={{
+    __html: `
+      (function() {
+        const theme = localStorage.getItem('theme') || 'system';
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        const resolved = theme === 'system' ? systemTheme : theme;
+        
+        // Only add 'dark' class if needed, not 'light'
+        if (resolved === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    `,
+  }}
+/>
       </head>
       <body className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-slate-100 antialiased transition-colors">
         <ThemeProvider>

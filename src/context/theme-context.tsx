@@ -31,27 +31,30 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (!mounted) return;
 
     const root = document.documentElement;
-    const applyTheme = (currentTheme: Theme) => {
-      let resolved: 'light' | 'dark';
-      
-      if (currentTheme === 'system') {
-        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        resolved = systemTheme ? 'dark' : 'light';
-      } else {
-        resolved = currentTheme;
-      }
-      
-      // Remove both classes first
-      root.classList.remove('light', 'dark');
-      // Add the resolved theme
-      root.classList.add(resolved);
-      // Update state
-      setResolvedTheme(resolved);
-      // Save to localStorage
-      localStorage.setItem('theme', currentTheme);
-      // Set data attribute for CSS
-      root.setAttribute('data-theme', currentTheme);
-    };
+const applyTheme = (currentTheme: Theme) => {
+  let resolved: 'light' | 'dark';
+  
+  if (currentTheme === 'system') {
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    resolved = systemTheme ? 'dark' : 'light';
+  } else {
+    resolved = currentTheme;
+  }
+  
+  // Only manage the 'dark' class
+  if (resolved === 'dark') {
+    root.classList.add('dark');
+  } else {
+    root.classList.remove('dark');
+  }
+  
+  // Update state
+  setResolvedTheme(resolved);
+  // Save to localStorage
+  localStorage.setItem('theme', currentTheme);
+  // Set data attribute for CSS
+  root.setAttribute('data-theme', currentTheme);
+};
 
     applyTheme(theme);
 
