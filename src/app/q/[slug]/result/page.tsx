@@ -192,63 +192,75 @@ function ResultContent() {
             </p>
           </div>
 
-          {/* Score Breakdown - Improved Mobile Layout */}
+          {/* Score Breakdown - Clean Mobile Layout */}
           <div className="border-t border-slate-200 dark:border-slate-800 pt-6 sm:pt-8 mb-6 sm:mb-8">
             <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-6">
               Score Breakdown
             </h3>
-            <div className="space-y-5">
-              {quiz.weightKeys.map((key) => {
-                const res = quiz.results.find((r) => r.weightKey === key);
-                const pct = percentages[key] || 0;
-                const isWinner = res?.weightKey === result.weightKey;
-                
-                return (
-                  <div key={key} className="space-y-2">
-                    {/* Label and Percentage Row */}
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 min-w-0 flex-1">
-                        <span className="text-lg sm:text-xl flex-shrink-0">
-                          {getResultEmoji(key)}
-                        </span>
-                        <span 
-                          className={`text-sm sm:text-base font-medium truncate ${
-                            isWinner 
-                              ? 'text-indigo-600 dark:text-indigo-400' 
-                              : 'text-slate-600 dark:text-slate-400'
-                          }`}
-                        >
-                          {res?.label || key}
-                        </span>
+            <div className="space-y-4">
+              {quiz.weightKeys
+                .sort((a, b) => (percentages[b] || 0) - (percentages[a] || 0))
+                .map((key) => {
+                  const res = quiz.results.find((r) => r.weightKey === key);
+                  const pct = percentages[key] || 0;
+                  const isWinner = res?.weightKey === result.weightKey;
+                  
+                  return (
+                    <div key={key} className="relative">
+                      {/* Container for the entire row */}
+                      <div className="flex items-center gap-3">
+                        {/* Emoji */}
+                        <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
+                          <span className="text-2xl">
+                            {getResultEmoji(key)}
+                          </span>
+                        </div>
+                        
+                        {/* Progress Container */}
+                        <div className="flex-1">
+                          {/* Label and Percentage */}
+                          <div className="flex items-center justify-between mb-1">
+                            <span 
+                              className={`text-sm font-medium ${
+                                isWinner 
+                                  ? 'text-indigo-600 dark:text-indigo-400' 
+                                  : 'text-slate-600 dark:text-slate-400'
+                              }`}
+                            >
+                              {res?.label?.split(' - ')[1] || res?.label || key}
+                            </span>
+                            <span 
+                              className={`text-sm font-bold ${
+                                isWinner 
+                                  ? 'text-indigo-600 dark:text-indigo-400' 
+                                  : 'text-slate-500 dark:text-slate-500'
+                              }`}
+                            >
+                              {pct}%
+                            </span>
+                          </div>
+                          
+                          {/* Progress Bar Background */}
+                          <div className="relative w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-visible">
+                            {/* Progress Bar Fill */}
+                            {pct > 0 && (
+                              <div
+                                className={`absolute top-0 left-0 h-full rounded-full transition-all duration-700 ease-out ${
+                                  isWinner 
+                                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 shadow-sm' 
+                                    : 'bg-slate-400 dark:bg-slate-600'
+                                }`}
+                                style={{ 
+                                  width: `${Math.max(pct, 2)}%` // Minimum 2% width for visibility
+                                }}
+                              />
+                            )}
+                          </div>
+                        </div>
                       </div>
-                      <span 
-                        className={`text-sm sm:text-base font-bold flex-shrink-0 ${
-                          isWinner 
-                            ? 'text-indigo-600 dark:text-indigo-400' 
-                            : 'text-slate-600 dark:text-slate-400'
-                        }`}
-                      >
-                        {pct}%
-                      </span>
                     </div>
-                    
-                    {/* Progress Bar */}
-                    <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 sm:h-3 overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-all duration-500 ease-out ${
-                          isWinner 
-                            ? 'bg-gradient-to-r from-indigo-600 to-purple-600' 
-                            : 'bg-slate-400 dark:bg-slate-500'
-                        }`}
-                        style={{ 
-                          width: `${pct}%`,
-                          minWidth: pct > 0 ? '4px' : '0' // Ensure visibility for small percentages
-                        }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           </div>
 
