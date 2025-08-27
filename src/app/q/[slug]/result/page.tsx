@@ -8,7 +8,6 @@ import { getQuiz } from "@/data/quizzes";
 import { withAffiliateTag } from "@/data/affiliates";
 import { trackAffiliateClick } from "@/lib/track";
 
-// Define the product type
 interface Product {
   id: string;
   title: string;
@@ -24,7 +23,6 @@ function ResultContent() {
   const quiz = getQuiz(params.slug);
   const answersParam = searchParams.get("a") || "";
 
-  // Keep hooks unconditional
   const answers = useMemo(
     () => answersParam.split(",").filter(Boolean),
     [answersParam]
@@ -76,14 +74,18 @@ function ResultContent() {
     ) as Record<string, number>;
   }, [quiz, answers]);
 
-  // Safe early return AFTER hooks are declared
   if (!quiz || !result) {
     return (
-     <main className="min-h-screen">
-        <div className="container mx-auto px-6 max-w-4xl py-16">
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-8">
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Quiz not found</h1>
-            <Link href="/q" className="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+      <main className="min-h-screen">
+        <div className="container mx-auto px-4 max-w-4xl py-8">
+          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+            <h1 className="text-xl font-bold text-slate-900 dark:text-white mb-4">
+              Quiz not found
+            </h1>
+            <Link
+              href="/q"
+              className="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+            >
               Back to quizzes
             </Link>
           </div>
@@ -98,7 +100,6 @@ function ResultContent() {
       ? `${window.location.origin}/q/${quiz.slug}`
       : "";
 
-  // Fixed: Added proper type instead of any
   const handleProductClick = (product: Product) => {
     trackAffiliateClick({
       vendor: "amazon",
@@ -121,82 +122,151 @@ function ResultContent() {
     }
   };
 
+  // Get emoji for each result type
+  const getResultEmoji = (weightKey: string) => {
+    switch(weightKey) {
+      case 'owl': return '🦉';
+      case 'fox': return '🦊';
+      case 'wolf': return '🐺';
+      case 'dolphin': return '🐬';
+      case 'direct': return '🎯';
+      case 'supportive': return '🤝';
+      case 'expressive': return '🎨';
+      case 'analytical': return '📊';
+      case 'minimal': return '⚪';
+      case 'ergonomic': return '🪑';
+      case 'creative': return '🎨';
+      case 'tech': return '💻';
+      case 'light': return '🌙';
+      case 'schedule': return '⏰';
+      case 'comfort': return '🛏️';
+      case 'mind': return '🧠';
+      default: return '⭐';
+    }
+  };
+
   return (
-   <main className="min-h-screen">
-      <div className="container mx-auto px-6 max-w-4xl py-16">
+    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+      <div className="container mx-auto px-4 sm:px-6 max-w-4xl py-8 sm:py-12">
         {/* Desk Setup Pack Banner - Only show for animal quiz */}
         {quiz.slug === "animal" && (
-          <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-8 text-white mb-8">
-            <h3 className="text-lg font-bold mb-3">
+          <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-6 sm:p-8 text-white mb-6 sm:mb-8">
+            <h3 className="text-base sm:text-lg font-bold mb-2 sm:mb-3">
               New: Desk Setup Pack for Your Type
             </h3>
-            <p className="text-white opacity-90 mb-4">
+            <p className="text-sm sm:text-base text-white/90 mb-4">
               Get exact monitor heights, keyboard distance, and a 5-minute ergonomic fit test personalized for your productivity type.
             </p>
             <a
               href="https://gabyzx45.gumroad.com/l/uedfhc?utm_campaign=quizapp_au&utm_source=results_page&utm_medium=cta&utm_content=deskpack_primary"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-white text-purple-700 px-6 py-3 rounded-full font-bold hover:bg-slate-100 transition-all shadow-lg"
+              className="inline-flex items-center gap-2 bg-white text-purple-700 px-6 py-3 rounded-full font-bold text-sm sm:text-base hover:bg-slate-100 transition-all shadow-lg"
             >
-              Get Your Personalized Workspace Blueprint →
+              Get Your Personalized Workspace Blueprint
+              <span className="text-lg">→</span>
             </a>
           </div>
         )}
 
         {/* Main Result Card */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-10 mb-8">
-          <div className="text-center mb-10">
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Your Result</h1>
-            <div className="text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
-              {result.label}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-10 mb-6 sm:mb-8 shadow-sm">
+          {/* Result Header */}
+          <div className="text-center mb-8 sm:mb-10">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-4">
+              Your Result
+            </h1>
+            
+            {/* Result Label with Emoji */}
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <span className="text-4xl sm:text-5xl">
+                {getResultEmoji(result.weightKey)}
+              </span>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                {result.label}
+              </h2>
             </div>
-            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+            
+            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
               {result.description}
             </p>
           </div>
 
-          {/* Score Breakdown */}
-          <div className="border-t border-slate-200 dark:border-slate-800 pt-8 mb-8">
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Score Breakdown</h3>
-            <div className="space-y-4">
+          {/* Score Breakdown - Improved Mobile Layout */}
+          <div className="border-t border-slate-200 dark:border-slate-800 pt-6 sm:pt-8 mb-6 sm:mb-8">
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-6">
+              Score Breakdown
+            </h3>
+            <div className="space-y-5">
               {quiz.weightKeys.map((key) => {
                 const res = quiz.results.find((r) => r.weightKey === key);
                 const pct = percentages[key] || 0;
                 const isWinner = res?.weightKey === result.weightKey;
+                
                 return (
-                  <div key={key} className="flex items-center gap-4">
-                    <span className={`w-28 text-sm font-medium ${isWinner ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-400'}`}>
-                      {res?.label || key}
-                    </span>
-                    <div className="flex-1 bg-slate-200 dark:bg-slate-700 rounded-full h-3">
+                  <div key={key} className="space-y-2">
+                    {/* Label and Percentage Row */}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 min-w-0 flex-1">
+                        <span className="text-lg sm:text-xl flex-shrink-0">
+                          {getResultEmoji(key)}
+                        </span>
+                        <span 
+                          className={`text-sm sm:text-base font-medium truncate ${
+                            isWinner 
+                              ? 'text-indigo-600 dark:text-indigo-400' 
+                              : 'text-slate-600 dark:text-slate-400'
+                          }`}
+                        >
+                          {res?.label || key}
+                        </span>
+                      </div>
+                      <span 
+                        className={`text-sm sm:text-base font-bold flex-shrink-0 ${
+                          isWinner 
+                            ? 'text-indigo-600 dark:text-indigo-400' 
+                            : 'text-slate-600 dark:text-slate-400'
+                        }`}
+                      >
+                        {pct}%
+                      </span>
+                    </div>
+                    
+                    {/* Progress Bar */}
+                    <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 sm:h-3 overflow-hidden">
                       <div
-                        className={`h-3 rounded-full transition-all ${
+                        className={`h-full rounded-full transition-all duration-500 ease-out ${
                           isWinner 
                             ? 'bg-gradient-to-r from-indigo-600 to-purple-600' 
                             : 'bg-slate-400 dark:bg-slate-500'
                         }`}
-                        style={{ width: `${pct}%` }}
+                        style={{ 
+                          width: `${pct}%`,
+                          minWidth: pct > 0 ? '4px' : '0' // Ensure visibility for small percentages
+                        }}
                       />
                     </div>
-                    <span className={`text-sm w-12 text-right font-medium ${isWinner ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-400'}`}>
-                      {pct}%
-                    </span>
                   </div>
                 );
               })}
             </div>
           </div>
 
-          {/* Tips */}
+          {/* Tips Section */}
           {result.tips && result.tips.length > 0 && (
-            <div className="border-t border-slate-200 dark:border-slate-800 pt-8 mb-8">
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Tips for You</h3>
+            <div className="border-t border-slate-200 dark:border-slate-800 pt-6 sm:pt-8 mb-6 sm:mb-8">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-4 sm:mb-6">
+                Tips for You
+              </h3>
               <ul className="space-y-3">
                 {result.tips.map((tip, i) => (
                   <li key={i} className="flex gap-3">
-                    <span className="text-indigo-600 dark:text-indigo-400 mt-1">•</span>
-                    <span className="text-slate-600 dark:text-slate-400">{tip}</span>
+                    <span className="text-indigo-600 dark:text-indigo-400 mt-0.5 flex-shrink-0">
+                      •
+                    </span>
+                    <span className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+                      {tip}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -205,9 +275,11 @@ function ResultContent() {
 
           {/* Product Recommendations */}
           {result.products && result.products.length > 0 && (
-            <div className="border-t border-slate-200 dark:border-slate-800 pt-8 mb-8">
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Recommended Gear</h3>
-              <div className="grid gap-4">
+            <div className="border-t border-slate-200 dark:border-slate-800 pt-6 sm:pt-8 mb-6 sm:mb-8">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-4 sm:mb-6">
+                Recommended Gear
+              </h3>
+              <div className="grid gap-3 sm:gap-4">
                 {result.products.map((product) => (
                   <a
                     key={product.id}
@@ -215,70 +287,108 @@ function ResultContent() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => handleProductClick(product)}
-                    className="flex items-center justify-between p-6 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700"
+                    className="flex items-center justify-between p-4 sm:p-6 rounded-xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700 group"
                   >
-                    <div>
-                      <div className="font-semibold text-slate-900 dark:text-white">
+                    <div className="min-w-0 flex-1 pr-4">
+                      <div className="font-semibold text-sm sm:text-base text-slate-900 dark:text-white truncate">
                         {product.title}
                       </div>
                       {product.subtitle && (
-                        <div className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                        <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
                           {product.subtitle}
                         </div>
                       )}
                     </div>
-                    <span className="text-indigo-600 dark:text-indigo-400 text-xl">→</span>
+                    <span className="text-indigo-600 dark:text-indigo-400 text-xl flex-shrink-0 group-hover:translate-x-1 transition-transform">
+                      →
+                    </span>
                   </a>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
             <button 
               onClick={handleShare} 
-              className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-full font-bold hover:shadow-lg transition-all"
+              className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 sm:py-4 rounded-full font-bold text-sm sm:text-base hover:shadow-lg transition-all"
             >
               Share Result
             </button>
             <Link 
               href={`/q/${quiz.slug}`} 
-              className="flex-1 bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-2 border-slate-200 dark:border-slate-700 px-8 py-4 rounded-full font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-center"
+              className="flex-1 bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-2 border-slate-200 dark:border-slate-700 px-6 py-3 sm:py-4 rounded-full font-bold text-sm sm:text-base hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-center"
             >
               Retake Quiz
             </Link>
           </div>
         </div>
 
-        {/* More Quizzes */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-8">
-          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Try Another Quiz</h3>
-          <div className="space-y-4">
-            <Link href="/q/animal">
-              <div className="block p-6 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer">
-                <h4 className="font-semibold text-slate-900 dark:text-white mb-2">
-                  Productivity Animal Test
-                </h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Discover if you are an Owl, Fox, Wolf, or Dolphin
-                </p>
-              </div>
-            </Link>
-            <Link href="/q/comm">
-              <div className="block p-6 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer">
-                <h4 className="font-semibold text-slate-900 dark:text-white mb-2">
-                  Communication Style Quiz
-                </h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Find your communication strengths and blind spots
-                </p>
-              </div>
-            </Link>
+        {/* More Quizzes Section */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm">
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-4 sm:mb-6">
+            Try Another Quiz
+          </h3>
+          <div className="space-y-3 sm:space-y-4">
+            {/* Filter out current quiz */}
+            {quiz.slug !== 'animal' && (
+              <Link href="/q/animal">
+                <div className="block p-4 sm:p-6 rounded-xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer">
+                  <h4 className="font-semibold text-sm sm:text-base text-slate-900 dark:text-white mb-2">
+                    Productivity Animal Test
+                  </h4>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+                    Discover if you are an Owl, Fox, Wolf, or Dolphin
+                  </p>
+                </div>
+              </Link>
+            )}
+            
+            {quiz.slug !== 'comm' && (
+              <Link href="/q/comm">
+                <div className="block p-4 sm:p-6 rounded-xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer">
+                  <h4 className="font-semibold text-sm sm:text-base text-slate-900 dark:text-white mb-2">
+                    Communication Style Quiz
+                  </h4>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+                    Find your communication strengths and blind spots
+                  </p>
+                </div>
+              </Link>
+            )}
+            
+            {quiz.slug !== 'desk' && (
+              <Link href="/q/desk">
+                <div className="block p-4 sm:p-6 rounded-xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer">
+                  <h4 className="font-semibold text-sm sm:text-base text-slate-900 dark:text-white mb-2">
+                    Perfect Desk Setup Finder
+                  </h4>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+                    Design your ideal workspace setup
+                  </p>
+                </div>
+              </Link>
+            )}
+            
+            {quiz.slug !== 'sleep' && (
+              <Link href="/q/sleep">
+                <div className="block p-4 sm:p-6 rounded-xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer">
+                  <h4 className="font-semibold text-sm sm:text-base text-slate-900 dark:text-white mb-2">
+                    Sleep Optimization Test
+                  </h4>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+                    Get personalized solutions for better rest
+                  </p>
+                </div>
+              </Link>
+            )}
+
+            {/* Browse All Quizzes */}
             <Link href="/q">
-              <div className="block p-6 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 transition-colors border border-indigo-200 dark:border-indigo-800 cursor-pointer">
+              <div className="block p-4 sm:p-6 rounded-xl bg-indigo-50 dark:bg-indigo-900/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 transition-colors border border-indigo-200 dark:border-indigo-800 cursor-pointer">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-semibold text-indigo-900 dark:text-indigo-300">
+                  <h4 className="font-semibold text-sm sm:text-base text-indigo-900 dark:text-indigo-300">
                     Browse All Quizzes
                   </h4>
                   <span className="text-indigo-600 dark:text-indigo-400 text-xl">→</span>
@@ -296,9 +406,9 @@ export default function ResultPage() {
   return (
     <Suspense
       fallback={
-       <main className="min-h-screen">
-          <div className="container mx-auto px-6 max-w-4xl py-16">
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-8">
+        <main className="min-h-screen">
+          <div className="container mx-auto px-4 max-w-4xl py-8">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
               <div className="text-center text-slate-600 dark:text-slate-400">
                 Loading results...
               </div>
