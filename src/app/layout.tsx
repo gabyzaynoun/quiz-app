@@ -1,10 +1,9 @@
-// src/app/layout.tsx
+// src/app/layout.tsx - Fixed Mobile Header and Theme Toggle
 import "./globals.css";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Analytics } from "@vercel/analytics/react";
 import { ThemeProvider } from "@/context/theme-context";
-import { PageTransition } from "@/components/ui/page-transition";
 import { SITE, SEO, SEO_KEYWORDS } from "@/config/site";
 import { StructuredData } from "@/components/ui/structured-data";
 import { MobileMenu } from "@/components/ui/mobile-menu";
@@ -52,24 +51,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="format-detection" content="telephone=no" />
-      
-<script
-  dangerouslySetInnerHTML={{
-    __html: `
-      (function() {
-        const theme = localStorage.getItem('theme') || 'system';
-        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        const resolved = theme === 'system' ? systemTheme : theme;
         
-        // Only add 'dark' class if needed, not 'light'
-        if (resolved === 'dark') {
-          document.documentElement.classList.add('dark');
-        }
-        document.documentElement.setAttribute('data-theme', theme);
-      })();
-    `,
-  }}
-/>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const theme = localStorage.getItem('theme') || 'system';
+                  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  const resolved = theme === 'system' ? systemTheme : theme;
+                  
+                  if (resolved === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                  document.documentElement.setAttribute('data-theme', theme);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-slate-100 antialiased transition-colors">
         <ThemeProvider>
@@ -81,18 +83,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </a>
 
           <div className="min-h-screen flex flex-col">
-            {/* Header - Responsive with Mobile Menu */}
-            <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
+            {/* Header - Fixed mobile header with proper z-index */}
+            <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/95 dark:bg-slate-900/95 border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
               <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-                <div className="flex items-center justify-between h-16">
-                  {/* Logo */}
+                <div className="flex items-center justify-between h-14 sm:h-16">
+                  {/* Logo - Responsive sizing */}
                   <Link
                     href="/"
-                    className="font-bold text-lg sm:text-xl tracking-tight hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center gap-2"
+                    className="font-bold text-base sm:text-xl tracking-tight hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center gap-1 sm:gap-2"
                   >
-                    <span className="text-2xl">🎯</span>
-                    <span className="hidden sm:inline">{SITE.name}</span>
-                    <span className="sm:hidden">Find By Type</span>
+                    <span className="text-xl sm:text-2xl">🎯</span>
+                    <span className="hidden min-[400px]:inline sm:inline">{SITE.name}</span>
+                    <span className="min-[400px]:hidden">FBT</span>
                   </Link>
 
                   {/* Desktop Navigation */}
@@ -126,7 +128,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </div>
                   </nav>
 
-                  {/* Mobile Controls */}
+                  {/* Mobile Controls - Visible on mobile */}
                   <div className="flex items-center gap-2 md:hidden">
                     <ThemeToggle />
                     <MobileMenu />
@@ -137,29 +139,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             {/* Main Content */}
             <main id="main" className="flex-1 w-full">
-              <PageTransition>
-                <div className="page-enter">
-                  {children}
-                </div>
-              </PageTransition>
+              {children}
             </main>
 
-            {/* Footer - Responsive Grid */}
+            {/* Footer - Simplified for mobile */}
             <footer className="mt-auto backdrop-blur-md bg-slate-50/80 dark:bg-slate-900/80 border-t border-slate-200 dark:border-slate-800 transition-all duration-300">
-              <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-8 sm:py-12">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+              <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-6 sm:py-8 lg:py-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
                   {/* Company Info */}
                   <div className="text-center sm:text-left">
-                    <h3 className="font-bold text-lg mb-3">{SITE.name}</h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                      Discover your productivity type and optimize your workspace with personalized recommendations for Australian remote workers.
+                    <h3 className="font-bold text-base sm:text-lg mb-3">{SITE.name}</h3>
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-4">
+                      Discover your productivity type and optimize your workspace.
                     </p>
                   </div>
 
-                  {/* Quick Links */}
-                  <div className="text-center sm:text-left">
-                    <h3 className="font-bold text-lg mb-3">Quick Links</h3>
-                    <ul className="space-y-2 text-sm">
+                  {/* Quick Links - Hidden on mobile, visible on tablet+ */}
+                  <div className="hidden sm:block text-center sm:text-left">
+                    <h3 className="font-bold text-base sm:text-lg mb-3">Quick Links</h3>
+                    <ul className="space-y-2 text-xs sm:text-sm">
                       <li>
                         <Link href="/q/animal" className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
                           Productivity Animal Quiz
@@ -178,10 +176,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </ul>
                   </div>
 
-                  {/* Legal */}
-                  <div className="text-center sm:text-left">
-                    <h3 className="font-bold text-lg mb-3">Legal</h3>
-                    <ul className="space-y-2 text-sm">
+                  {/* Legal - Hidden on mobile, visible on tablet+ */}
+                  <div className="hidden sm:block text-center sm:text-left">
+                    <h3 className="font-bold text-base sm:text-lg mb-3">Legal</h3>
+                    <ul className="space-y-2 text-xs sm:text-sm">
                       <li>
                         <Link href="/privacy" className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
                           Privacy Policy
@@ -197,22 +195,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                           Affiliate Disclosure
                         </Link>
                       </li>
-                      <li>
-                        <Link href="/dmca" className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
-                          DMCA Policy
-                        </Link>
-                      </li>
                     </ul>
                   </div>
                 </div>
 
-                {/* Copyright */}
-                <div className="pt-6 sm:pt-8 border-t border-slate-200 dark:border-slate-700 text-center">
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    © {new Date().getFullYear()} {SITE.name} • 
-                    <a href="mailto:support@findbytype.com.au" className="hover:text-purple-600 dark:hover:text-purple-400 ml-1 transition-colors">
-                      support@findbytype.com.au
-                    </a>
+                {/* Copyright - Always visible */}
+                <div className="pt-4 sm:pt-6 border-t border-slate-200 dark:border-slate-700 text-center">
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+                    © {new Date().getFullYear()} {SITE.name}
                   </p>
                 </div>
               </div>
