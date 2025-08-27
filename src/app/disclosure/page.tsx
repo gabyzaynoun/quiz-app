@@ -2,8 +2,17 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Affiliate Disclosure",
-  description: "Affiliate Disclosure for Find By Type - Transparency about our affiliate relationships and recommendations",
+  title: "Affiliate Disclosure | Find By Type",
+  description: "Transparency about our affiliate relationships. Learn how we make recommendations and earn commissions from qualifying purchases at no extra cost to you.",
+  alternates: {
+    canonical: "https://findbytype.com.au/disclosure"
+  },
+  openGraph: {
+    title: "Affiliate Disclosure | Find By Type",
+    description: "Transparency about our affiliate relationships and product recommendations",
+    url: "https://findbytype.com.au/disclosure",
+    type: 'website',
+  }
 };
 
 export default function DisclosurePage() {

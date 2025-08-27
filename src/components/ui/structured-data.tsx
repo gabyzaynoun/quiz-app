@@ -1,7 +1,7 @@
-// src/components/structured-data.tsx
+// src/components/structured-data-enhanced.tsx
 import { SITE } from '@/config/site';
 
-export function StructuredData() {
+export function EnhancedStructuredData() {
   const structuredData = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -18,7 +18,7 @@ export function StructuredData() {
           '@type': 'SearchAction',
           target: {
             '@type': 'EntryPoint',
-            urlTemplate: `${SITE.url}/quiz?q={search_term_string}`,
+            urlTemplate: `${SITE.url}/q?search={search_term_string}`,
           },
           'query-input': 'required name=search_term_string',
         },
@@ -30,37 +30,52 @@ export function StructuredData() {
         name: 'Find By Type',
         url: SITE.url,
         email: 'support@findbytype.com.au',
+        logo: {
+          '@type': 'ImageObject',
+          url: `${SITE.url}/logo.png`,
+          width: 512,
+          height: 512,
+        },
         sameAs: [
           'https://twitter.com/findbytype',
         ],
-        logo: {
-          '@type': 'ImageObject',
-          '@id': `${SITE.url}/#logo`,
-          inLanguage: 'en-AU',
-          url: `${SITE.url}/logo.png`,
-          contentUrl: `${SITE.url}/logo.png`,
-          width: 512,
-          height: 512,
-          caption: 'Find By Type',
-        },
-        image: {
-          '@id': `${SITE.url}/#logo`,
-        },
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Sydney',
+          addressRegion: 'NSW',
+          addressCountry: 'AU'
+        }
       },
       {
-        '@type': 'Quiz',
-        '@id': `${SITE.url}/quiz/#quiz`,
-        name: 'Productivity Animal Quiz',
-        description: 'Discover your productivity type - Are you an Owl, Fox, Wolf, or Dolphin?',
-        educationalLevel: 'General',
-        learningResourceType: 'Quiz',
-        interactivityType: 'active',
-        isAccessibleForFree: true,
-        url: `${SITE.url}/quiz`,
-        provider: {
-          '@id': `${SITE.url}/#organization`,
-        },
-      },
+        '@type': 'FAQPage',
+        '@id': `${SITE.url}/#faq`,
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'How do the productivity quizzes work?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Our quizzes take 2-3 minutes to complete. Answer simple multiple-choice questions to discover your productivity type and get personalized recommendations for desk setup, communication style, and more.'
+            }
+          },
+          {
+            '@type': 'Question',
+            name: 'Are the quizzes free?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Yes, all our quizzes are completely free. No signup or email required. Take as many quizzes as you like.'
+            }
+          },
+          {
+            '@type': 'Question',
+            name: 'What productivity animals are there?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'The four productivity animals are: Owl (deep thinkers), Fox (creative innovators), Wolf (strategic leaders), and Dolphin (social connectors). Each has unique strengths and ideal work environments.'
+            }
+          }
+        ]
+      }
     ],
   };
 
@@ -71,7 +86,3 @@ export function StructuredData() {
     />
   );
 }
-
-// Add this to your layout.tsx in the <head> section:
-// import { StructuredData } from '@/components/structured-data';
-// Then add <StructuredData /> inside the <head> tag

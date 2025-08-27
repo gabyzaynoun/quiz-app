@@ -1,10 +1,20 @@
 // src/app/q/page.tsx - Fixed with proper escaping
 import Link from "next/link";
 import { listQuizzes } from "@/data/quizzes";
+import type { Metadata } from "next";
 
-export const metadata = { 
-  title: "All Quizzes - Choose Your Test",
-  description: "Pick from personality, communication, desk setup, or sleep optimization quizzes."
+export const metadata: Metadata = { 
+  title: "Free Personality & Productivity Quizzes | Find By Type",
+  description: "Take free personality tests to discover your work style. Choose from Animal Archetype, Communication Style, Desk Setup, and Sleep Optimization quizzes. Get personalized recommendations.",
+  alternates: {
+    canonical: "https://findbytype.com.au/q"
+  },
+  openGraph: {
+    title: "Free Personality & Productivity Quizzes",
+    description: "Discover your productivity type with our quick, free personality tests",
+    url: "https://findbytype.com.au/q",
+    type: 'website',
+  }
 };
 
 export default function QuizHub() {

@@ -5,9 +5,8 @@ import Link from "next/link";
 import { Analytics } from "@vercel/analytics/react";
 import { ThemeProvider } from "@/context/theme-context";
 import { SITE, SEO, SEO_KEYWORDS } from "@/config/site";
-import { StructuredData } from "@/components/ui/structured-data";
+import { EnhancedStructuredData } from "@/components/ui/structured-data";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { MobileNavigation } from "@/components/ui/mobile-navigation";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -42,7 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-AU" suppressHydrationWarning>
       <head>
-        <StructuredData />
+        <EnhancedStructuredData />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
         <meta name="theme-color" content="#4F46E5" />
         <link rel="manifest" href="/manifest.json" />

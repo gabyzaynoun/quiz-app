@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+Allow: /q
+Allow: /q/*
+Allow: /shop
+Allow: /links
+Allow: /disclosure
+Allow: /privacy
+Allow: /terms
+Disallow: /api/
+Disallow: /_next/static/
+Disallow: /q/*/result?*
+Disallow: /q/*/*?*
+
+Sitemap: https://findbytype.com.au/sitemap.xml
+
+User-agent: Googlebot
+Crawl-delay: 0
+
+User-agent: bingbot
+Crawl-delay: 1
