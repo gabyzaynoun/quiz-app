@@ -1,10 +1,9 @@
-// src/app/q/[slug]/[index]/page.tsx - Updated with consistent theme
+// src/app/q/[slug]/[index]/page.tsx - Fixed with proper escaping and removed unused import
 "use client";
 
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { getQuiz } from "@/data/quizzes";
-import { Progress } from "@/components/ui/Progress";
 
 export default function QuestionPage() {
   const router = useRouter();

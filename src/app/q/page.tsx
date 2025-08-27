@@ -1,4 +1,4 @@
-// src/app/q/page.tsx - Updated with consistent theme
+// src/app/q/page.tsx - Fixed with proper escaping
 import Link from "next/link";
 import { listQuizzes } from "@/data/quizzes";
 
@@ -36,7 +36,7 @@ export default function QuizHub() {
                 Productivity Animal Test
               </h2>
               <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-                Discover if you're an Owl, Fox, Wolf, or Dolphin. Get personalized desk setup recommendations.
+                Discover if you&apos;re an Owl, Fox, Wolf, or Dolphin. Get personalized desk setup recommendations.
               </p>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-slate-500 dark:text-slate-400">12 questions • 3 minutes</span>

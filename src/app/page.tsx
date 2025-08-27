@@ -1,4 +1,4 @@
-// src/app/page.tsx - Final refined version
+// src/app/page.tsx - Fixed version with proper escaping
 import Link from "next/link";
 
 export default function Home() {
@@ -209,7 +209,7 @@ export default function Home() {
                 3
               </div>
               <div className="space-y-3">
-                <h3 className="font-bold text-2xl text-slate-900 dark:text-white">Get Results & Shop</h3>
+                <h3 className="font-bold text-2xl text-slate-900 dark:text-white">Get Results &amp; Shop</h3>
                 <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                   See your type, get tips, and browse curated Amazon products for your style
                 </p>
@@ -269,7 +269,7 @@ export default function Home() {
               <div className="w-14 h-14 bg-gradient-to-br from-purple-100 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 rounded-xl flex items-center justify-center mb-6">
                 <span className="text-3xl">⚡</span>
               </div>
-              <h3 className="font-bold text-xl mb-4 text-slate-900 dark:text-white">Quick & Easy</h3>
+              <h3 className="font-bold text-xl mb-4 text-slate-900 dark:text-white">Quick &amp; Easy</h3>
               <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                 Each quiz takes just 2-3 minutes with instant results
               </p>
@@ -281,7 +281,7 @@ export default function Home() {
               </div>
               <h3 className="font-bold text-xl mb-4 text-slate-900 dark:text-white">Privacy First</h3>
               <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                No signup required, answers aren't stored anywhere
+                No signup required, answers aren&apos;t stored anywhere
               </p>
             </div>
 
@@ -317,7 +317,7 @@ export default function Home() {
           
           {/* Better spacing for subheading */}
           <p className="text-xl md:text-2xl text-slate-200 max-w-3xl mx-auto mb-12">
-            Join thousands of Australians who've optimized their workspace and productivity
+            Join thousands of Australians who&apos;ve optimized their workspace and productivity
           </p>
           
           {/* Enhanced CTA button with glow effect */}

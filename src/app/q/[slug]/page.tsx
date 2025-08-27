@@ -1,4 +1,4 @@
-// src/app/q/[slug]/page.tsx - Updated with consistent theme
+// src/app/q/[slug]/page.tsx - Fixed with proper escaping
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getQuiz } from "@/data/quizzes";
@@ -97,7 +97,7 @@ export default async function QuizIntro(
 
           {/* What You'll Discover */}
           <div className="mb-10">
-            <h2 className="font-semibold mb-4 text-slate-900 dark:text-white">What You'll Discover:</h2>
+            <h2 className="font-semibold mb-4 text-slate-900 dark:text-white">What You&apos;ll Discover:</h2>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
                 <div className="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
